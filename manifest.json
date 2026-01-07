@@ -1,7 +1,7 @@
 {
-  "name": "港幣換人民幣｜85/15 記帳與餘額",
-  "short_name": "換匯85/15",
-  "description": "HKD→RMB 批次加總、換匯結帳、按月記帳與餘額管理（我留自動累積，可存入/領出）。",
+  "name": "換匯記帳｜85/15 × 餘額 × RMB→TWD",
+  "short_name": "換匯記帳",
+  "description": "HKD→RMB 85/15 結帳、批次加總、按月記帳、餘額管理（存入/領出），並支援 RMB→TWD 換匯記錄（扣餘額）。",
   "start_url": "./?source=pwa",
   "scope": "./",
   "display": "standalone",
