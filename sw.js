@@ -1,4 +1,4 @@
-const CACHE_NAME = 'hkd-rmb-85-15-v2';
+const CACHE_NAME = 'change-pay-hr-pwa-v3';
 const ASSETS = [
   './',
   './index.html',
