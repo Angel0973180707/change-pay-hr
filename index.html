@@ -6,9 +6,9 @@
   <meta name="theme-color" content="#0b3d2e" />
   <title>港幣換人民幣｜85%給對方 15%留存</title>
 
-  <!-- ✅ GitHub Pages 子路徑穩：一律用 ./ -->
+  <!-- ✅ GitHub Pages 子路徑穩：全部用 ./ -->
   <link rel="manifest" href="./manifest.json" />
-  <link rel="apple-touch-icon" href="./icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="./icon-192.png" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 
@@ -22,7 +22,6 @@
       --soft:#f4faf7;
       --accent:#1f7a5b;
       --danger:#b42318;
-      --ok:#067647;
       --shadow:0 10px 24px rgba(16,32,24,.10);
       --radius:18px;
       font-synthesis-weight:none;
@@ -150,7 +149,6 @@
       line-height:1.5;
     }
     .tiny{opacity:.9}
-    .linklike{color:#d9fff2; text-decoration:underline; text-underline-offset:2px}
   </style>
 </head>
 
@@ -165,7 +163,6 @@
     </div>
 
     <div class="grid">
-      <!-- Left: Calculator -->
       <section class="card">
         <div class="hd">
           <div class="t">輸入資料</div>
@@ -208,7 +205,6 @@
         </div>
       </section>
 
-      <!-- Right: Results + History -->
       <section class="card">
         <div class="hd">
           <div class="t">計算結果</div>
@@ -259,7 +255,7 @@
   <div class="toast" id="toast">已複製</div>
 
 <script>
-  // ✅ GitHub Pages：註冊 SW 一定要把 scope 固定在 ./（子路徑才會被視為同一個 app）
+  // ✅ PWA：GitHub Pages 子路徑必備 scope:'./'
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', async () => {
       try {
