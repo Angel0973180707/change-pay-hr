@@ -1,4 +1,4 @@
-const CACHE_NAME = 'hkd-rmb-85-15-v1';
+const CACHE_NAME = 'hkd-rmb-85-15-v2';
 const ASSETS = [
   './',
   './index.html',
@@ -25,8 +25,7 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  const req = event.request;
   event.respondWith(
-    caches.match(req).then((cached) => cached || fetch(req).catch(() => cached))
+    caches.match(event.request).then((cached) => cached || fetch(event.request))
   );
 });
