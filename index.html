@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="theme-color" content="#0b3d2e" />
-  <title>港幣換人民幣｜批次加總×按月記帳×餘額</title>
+  <title>港幣→人民幣｜批次加總×按月記帳×餘額</title>
 
   <link rel="manifest" href="./manifest.json" />
   <link rel="apple-touch-icon" href="./icon-192.png" />
@@ -179,6 +179,8 @@
     }
     .tag.out{color:var(--danger)}
     .tag.in{color:var(--accent)}
+    .tag.fx{color:#0b3d2e}
+    .tag.tw{color:#0b3d2e}
 
     .toolbar{
       display:flex;
@@ -225,7 +227,7 @@
     <div class="top">
       <div class="brand">
         <h1>港幣 → 人民幣｜批次加總 × 按月記帳 × 餘額</h1>
-        <p>多筆 HKD 先加總→結帳換匯；我留自動進餘額；餘額可領出/存入並保留紀錄；按月檢索。</p>
+        <p>多筆 HKD 先加總→結帳換匯；我留自動進餘額；餘額可領出/存入；新增：RMB→TWD 換匯記錄（會扣餘額）。</p>
       </div>
       <div class="pill" id="netStatus">狀態：—</div>
     </div>
@@ -251,7 +253,7 @@
 
 <script>
 /* ===========================
-   PWA register (保留，不影響)
+   PWA register
 =========================== */
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', async () => {
@@ -329,18 +331,19 @@ function shiftMonth(ym, delta){
 }
 
 /* ===========================
-   Storage Keys (永久累積)
+   Storage Keys
 =========================== */
 const RATE_URL = 'https://gu.sina.cn/quotes/fx/HKDCNY';
-const LS_LEDGER = 'change_pay_hr_ledger_v2'; // 永久記帳（全部月份）
-const LS_BATCH  = 'change_pay_hr_batch_v2';  // 批次清單草稿
-const LS_PREF   = 'change_pay_hr_pref_v2';   // 偏好：tab/month
+const LS_LEDGER = 'change_pay_hr_ledger_v21';
+const LS_BATCH  = 'change_pay_hr_batch_v21';
+const LS_PREF   = 'change_pay_hr_pref_v21';
 
 /*
-  Ledger item:
-  - exchange:  {id,type:'exchange',ts,month,hkd,rate,pctOther,pctMe,totalRmb,otherRmb,meRmb,note,rateUrl}
-  - balance+:  {id,type:'balance_in',ts,month,amountRmb,note}
-  - balance-:  {id,type:'balance_out',ts,month,amountRmb,note}
+  Ledger item types:
+  - exchange:      HKD->RMB 結帳（meRmb 自動累積）
+  - balance_in:    手動存入 RMB
+  - balance_out:   手動領出 RMB
+  - rmb_to_twd:    RMB->TWD 換匯記錄（RMB 會從餘額扣除）
 */
 
 function loadLedger(){
@@ -374,12 +377,13 @@ function savePref(obj){
 }
 
 function calcBalance(all){
-  // 餘額 = Σ(meRmb from exchange) + Σ(balance_in) - Σ(balance_out)
+  // 餘額（RMB）= Σ(meRmb from exchange) + Σ(balance_in) - Σ(balance_out) - Σ(rmb_to_twd.rmb)
   let bal = 0;
   for (const it of all){
     if (it.type === 'exchange') bal += (Number(it.meRmb) || 0);
     if (it.type === 'balance_in') bal += (Number(it.amountRmb) || 0);
     if (it.type === 'balance_out') bal -= (Number(it.amountRmb) || 0);
+    if (it.type === 'rmb_to_twd') bal -= (Number(it.rmb) || 0);
   }
   return bal;
 }
@@ -387,6 +391,8 @@ function calcBalance(all){
 function monthSummary(all, month){
   const items = all.filter(x => x.month === month);
   let sumHKD=0, sumRmb=0, sumOther=0, sumMe=0, sumIn=0, sumOut=0;
+  let sumRmbToTwdRmb=0, sumRmbToTwdTwd=0;
+
   for (const it of items){
     if (it.type === 'exchange'){
       sumHKD += Number(it.hkd)||0;
@@ -396,8 +402,13 @@ function monthSummary(all, month){
     }
     if (it.type === 'balance_in') sumIn += Number(it.amountRmb)||0;
     if (it.type === 'balance_out') sumOut += Number(it.amountRmb)||0;
+
+    if (it.type === 'rmb_to_twd'){
+      sumRmbToTwdRmb += Number(it.rmb)||0;
+      sumRmbToTwdTwd += Number(it.twd)||0;
+    }
   }
-  return { count: items.length, sumHKD, sumRmb, sumOther, sumMe, sumIn, sumOut };
+  return { count: items.length, sumHKD, sumRmb, sumOther, sumMe, sumIn, sumOut, sumRmbToTwdRmb, sumRmbToTwdTwd };
 }
 
 /* ===========================
@@ -594,7 +605,7 @@ function renderBatch(){
   });
 
   $('#batch_clear').addEventListener('click', ()=>{
-    saveBatch({ items: [] });
+    saveBatch({ items: [] , sumHKD: 0 });
     toast('已清空');
     renderBatch();
   });
@@ -604,7 +615,6 @@ function renderBatch(){
     const sum = (b.items||[]).reduce((a,x)=>a+(Number(x.amount)||0),0);
     if (!sum) return toast('清單是空的');
 
-    // 帶入用：存一個 sumHKD
     b.sumHKD = sum;
     b.injectId = uid();
     saveBatch(b);
@@ -618,7 +628,7 @@ function renderBatch(){
 }
 
 /* ===========================
-   Pay: 換匯結帳（我留自動進餘額）
+   Pay: HKD->RMB 結帳（我留自動進餘額）
 =========================== */
 function renderPay(){
   const all = loadLedger();
@@ -629,7 +639,7 @@ function renderPay(){
   panelLeft.innerHTML = `
     <div class="hd">
       <div>
-        <div class="t">換匯結帳</div>
+        <div class="t">換匯結帳（HKD → RMB）</div>
         <div class="s">RMB總額 = HKD × 匯率；結帳後「我留」會自動加進餘額，並永久記帳（按月檢索）。</div>
       </div>
       <div class="tag in">餘額：<span class="mono">${fmt(bal)}</span> RMB</div>
@@ -671,7 +681,7 @@ function renderPay(){
       </div>
 
       <div class="note">
-        ✅ 若你剛從「批次加總」帶入，HKD 會自動填入（不會亂覆蓋你手填的）。<br/>
+        ✅ 若你剛從「批次加總」帶入，HKD 會自動填入。<br/>
         ✅ 結帳成功後，你可以選擇要不要清空批次清單（避免重複結帳）。
       </div>
     </div>
@@ -735,7 +745,6 @@ function renderPay(){
   const pctOEl = $('#pay_pctOther');
   const pctMEl = $('#pay_pctMe');
 
-  // 自動填入（只有在欄位空白時才填）
   if (!hkdEl.value && sumHKD > 0) hkdEl.value = String(sumHKD);
 
   function calcPreview(){
@@ -788,9 +797,9 @@ function renderPay(){
 
     $('#pay_month_summary').innerHTML =
       `本月筆數：<b class="mono">${sum.count}</b><br>` +
-      `本月 HKD 合計：<b class="mono">${fmt(sum.sumHKD)}</b><br>` +
-      `本月 RMB 總額：<b class="mono">${fmt(sum.sumRmb)}</b> ｜ 給對方：<b class="mono">${fmt(sum.sumOther)}</b> ｜ 我留：<b class="mono">${fmt(sum.sumMe)}</b><br>` +
-      `本月 餘額存入：<b class="mono">${fmt(sum.sumIn)}</b> ｜ 餘額領出：<b class="mono">${fmt(sum.sumOut)}</b><br>` +
+      `HKD→RMB｜HKD 合計：<b class="mono">${fmt(sum.sumHKD)}</b>｜RMB 總額：<b class="mono">${fmt(sum.sumRmb)}</b>｜對方：<b class="mono">${fmt(sum.sumOther)}</b>｜我留：<b class="mono">${fmt(sum.sumMe)}</b><br>` +
+      `餘額調整｜存入：<b class="mono">${fmt(sum.sumIn)}</b>｜領出：<b class="mono">${fmt(sum.sumOut)}</b><br>` +
+      `RMB→TWD｜用 RMB：<b class="mono">${fmt(sum.sumRmbToTwdRmb)}</b>｜換得 TWD：<b class="mono">${fmt(sum.sumRmbToTwdTwd)}</b><br>` +
       `目前累積餘額（全期間）：<b class="mono">${fmt(bal2)}</b> RMB`;
 
     const listEl = $('#pay_month_list');
@@ -807,6 +816,7 @@ function renderPay(){
     for (const it of items){
       const li = document.createElement('li');
       li.className = 'item';
+
       if (it.type === 'exchange'){
         li.innerHTML = `
           <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
@@ -836,7 +846,7 @@ function renderPay(){
             </div>
           </div>
         `;
-      } else {
+      } else if (it.type === 'balance_out') {
         li.innerHTML = `
           <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
             <div>
@@ -849,7 +859,22 @@ function renderPay(){
             </div>
           </div>
         `;
+      } else {
+        // rmb_to_twd
+        li.innerHTML = `
+          <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+            <div>
+              <div class="mono"><span class="tag fx">RMB→TWD</span> 用 RMB ${fmt(it.rmb)} × rate ${fmt(it.rate,4)} = TWD ${fmt(it.twd)}</div>
+              ${it.note ? `<div class="muted" style="margin-top:4px">備註：${escapeHtml(it.note)}</div>` : ``}
+              <div class="muted" style="margin-top:4px">${fmtTime(it.ts)}</div>
+            </div>
+            <div style="white-space:nowrap">
+              <button class="smallbtn" data-del="${it.id}">刪除</button>
+            </div>
+          </div>
+        `;
       }
+
       listEl.appendChild(li);
     }
 
@@ -865,7 +890,6 @@ function renderPay(){
     });
   }
 
-  // live calc
   ['input','change'].forEach(evt=>{
     hkdEl.addEventListener(evt, calcPreview);
     rateEl.addEventListener(evt, calcPreview);
@@ -896,7 +920,7 @@ function renderPay(){
     if (!res) return toast('先輸入資料');
     const note = ($('#pay_note').value || '').trim();
     const text =
-`兌換明細
+`兌換明細（HKD→RMB）
 HKD：${fmt(res.hkd)}
 匯率：1 HKD = ${fmt(res.rate,4)} RMB
 RMB 總額：${fmt(res.total)}
@@ -935,7 +959,6 @@ RMB 總額：${fmt(res.total)}
 
     toast('已存入結帳（我留已進餘額）');
 
-    // 可選：結帳後詢問是否清空批次清單（避免重複）
     const b = loadBatch();
     if ((b.items||[]).length){
       const ok = confirm('要清空「批次加總清單」嗎？\n（避免下次重複結帳）');
@@ -953,7 +976,7 @@ RMB 總額：${fmt(res.total)}
 }
 
 /* ===========================
-   Ledger: 按月檢索 + 餘額存入/領出 + 備份
+   Ledger: 按月檢索 + 餘額存入/領出 + RMB→TWD 記錄 + 備份
 =========================== */
 function renderLedger(){
   const all = loadLedger();
@@ -964,7 +987,7 @@ function renderLedger(){
     <div class="hd">
       <div>
         <div class="t">記帳與餘額（按月檢索）</div>
-        <div class="s">結帳（我留）自動進餘額；你也可手動「存入/領出」餘額並保留紀錄；可匯出/匯入備份。</div>
+        <div class="s">結帳（我留）自動進餘額；可手動存入/領出；新增：RMB→TWD 換匯記錄（會扣餘額）；可匯出/匯入備份。</div>
       </div>
       <div class="tag in">目前餘額：<span class="mono">${fmt(bal)}</span> RMB</div>
     </div>
@@ -987,30 +1010,30 @@ function renderLedger(){
 
       <div class="kpi">
         <div class="k">
-          <div class="lbl">本月 HKD 合計</div>
+          <div class="lbl">本月 HKD 合計（結帳）</div>
           <div class="val mono">${fmt(sum.sumHKD)}</div>
-          <div class="sub">（結帳）</div>
+          <div class="sub">HKD→RMB</div>
         </div>
         <div class="k">
           <div class="lbl">本月 我留（自動進餘額）</div>
           <div class="val mono">${fmt(sum.sumMe)}</div>
-          <div class="sub">（結帳）</div>
+          <div class="sub">HKD→RMB</div>
         </div>
         <div class="k">
-          <div class="lbl">本月 餘額存入</div>
-          <div class="val mono">${fmt(sum.sumIn)}</div>
-          <div class="sub">（手動）</div>
+          <div class="lbl">本月 RMB→TWD（用 RMB）</div>
+          <div class="val mono">${fmt(sum.sumRmbToTwdRmb)}</div>
+          <div class="sub">會扣餘額</div>
         </div>
         <div class="k">
-          <div class="lbl">本月 餘額領出</div>
-          <div class="val mono">${fmt(sum.sumOut)}</div>
-          <div class="sub">（手動）</div>
+          <div class="lbl">本月 RMB→TWD（換得 TWD）</div>
+          <div class="val mono">${fmt(sum.sumRmbToTwdTwd)}</div>
+          <div class="sub">記錄用途</div>
         </div>
       </div>
 
       <div class="divider"></div>
 
-      <div style="font-weight:900;margin-bottom:6px">餘額調整（可記錄存入/領出）</div>
+      <div style="font-weight:900;margin-bottom:6px">餘額調整（RMB 存入/領出）</div>
       <div class="row">
         <div>
           <label for="adj_type">類型</label>
@@ -1034,9 +1057,33 @@ function renderLedger(){
         <button class="btn-ghost" id="copy_balance">複製目前餘額</button>
       </div>
 
-      <div class="note">
-        ✅ 存入/領出都會寫入記帳，並反映在餘額。<br/>
-        ✅ 刪除單筆紀錄後，餘額會自動重算（因為餘額是「累積結果」）。
+      <div class="divider"></div>
+
+      <div style="font-weight:900;margin-bottom:6px">RMB → TWD 換匯記錄（會扣餘額）</div>
+      <div class="row">
+        <div>
+          <label for="rt_rmb">使用人民幣（RMB）</label>
+          <input id="rt_rmb" inputmode="decimal" placeholder="例如：1000" />
+        </div>
+        <div>
+          <label for="rt_rate">匯率（1 RMB = ? TWD）</label>
+          <input id="rt_rate" inputmode="decimal" placeholder="例如：4.35" />
+        </div>
+      </div>
+      <div style="margin-top:10px">
+        <label for="rt_note">備註（選填）</label>
+        <input id="rt_note" placeholder="例如：換現金/轉帳用途/誰的款" />
+      </div>
+
+      <div class="actions">
+        <button class="btn-warn" id="rt_preview">先算一下</button>
+        <button class="btn-primary" id="rt_save">存入 RMB→TWD 記錄</button>
+        <button class="btn-ghost" id="rt_copy">複製本次明細</button>
+      </div>
+
+      <div class="note" id="rt_note_box">
+        ✅ 這筆會「扣掉你的 RMB 餘額」。<br/>
+        ✅ TWD 是記錄用（方便你回頭對帳），匯率你手動輸入即可。
       </div>
     </div>
   `;
@@ -1096,11 +1143,25 @@ function renderLedger(){
             </div>
           </div>
         `;
-      } else {
+      } else if (it.type === 'balance_out') {
         li.innerHTML = `
           <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
             <div>
               <div class="mono"><span class="tag out">領出</span> RMB -${fmt(it.amountRmb)}</div>
+              ${it.note ? `<div class="muted" style="margin-top:4px">備註：${escapeHtml(it.note)}</div>` : ``}
+              <div class="muted" style="margin-top:4px">${fmtTime(it.ts)}</div>
+            </div>
+            <div style="white-space:nowrap">
+              <button class="smallbtn" data-del="${it.id}">刪除</button>
+            </div>
+          </div>
+        `;
+      } else {
+        // rmb_to_twd
+        li.innerHTML = `
+          <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+            <div>
+              <div class="mono"><span class="tag fx">RMB→TWD</span> 用 RMB ${fmt(it.rmb)} × rate ${fmt(it.rate,4)} = TWD ${fmt(it.twd)}</div>
               ${it.note ? `<div class="muted" style="margin-top:4px">備註：${escapeHtml(it.note)}</div>` : ``}
               <div class="muted" style="margin-top:4px">${fmtTime(it.ts)}</div>
             </div>
@@ -1168,11 +1229,74 @@ function renderLedger(){
     await copyText(`目前餘額：${fmt(bal2)} RMB`);
   });
 
+  // RMB->TWD preview/save/copy
+  function calcRmbToTwd(){
+    const rmb = toNum($('#rt_rmb').value);
+    const rate = toNum($('#rt_rate').value); // 1 RMB = ? TWD
+    if (!Number.isFinite(rmb) || rmb <= 0) return null;
+    if (!Number.isFinite(rate) || rate <= 0) return null;
+    const twd = rmb * rate;
+    return { rmb, rate, twd };
+  }
+
+  $('#rt_preview').addEventListener('click', ()=>{
+    const res = calcRmbToTwd();
+    if (!res) return toast('請輸入 RMB 與匯率');
+    $('#rt_note_box').innerHTML =
+      `本次預估：用 <b class="mono">RMB ${fmt(res.rmb)}</b> × rate <b class="mono">${fmt(res.rate,4)}</b> = <b class="mono">TWD ${fmt(res.twd)}</b><br>` +
+      `✅ 這筆存入後會扣你的 RMB 餘額。`;
+    toast('已計算');
+  });
+
+  $('#rt_copy').addEventListener('click', async ()=>{
+    const res = calcRmbToTwd();
+    if (!res) return toast('請輸入 RMB 與匯率');
+    const note = ($('#rt_note').value || '').trim();
+    const text =
+`換匯記錄（RMB→TWD）
+使用 RMB：${fmt(res.rmb)}
+匯率：1 RMB = ${fmt(res.rate,4)} TWD
+換得 TWD：${fmt(res.twd)}
+時間：${nowStr()}${note ? `\n備註：${note}` : ''}`;
+    await copyText(text);
+  });
+
+  $('#rt_save').addEventListener('click', ()=>{
+    const res = calcRmbToTwd();
+    if (!res) return toast('請輸入 RMB 與匯率');
+    const note = ($('#rt_note').value || '').trim();
+
+    const item = {
+      id: uid(),
+      type: 'rmb_to_twd',
+      ts: nowISO(),
+      month: currentMonth,
+      rmb: res.rmb,
+      rate: res.rate,
+      twd: res.twd,
+      note
+    };
+
+    const all2 = loadLedger();
+    all2.push(item);
+    all2.sort((a,b)=>(a.ts||'').localeCompare(b.ts||''));
+    saveLedger(all2);
+
+    $('#rt_rmb').value = '';
+    $('#rt_rate').value = '';
+    $('#rt_note').value = '';
+    $('#rt_note_box').innerHTML =
+      `✅ 這筆會「扣掉你的 RMB 餘額」。<br/>✅ TWD 是記錄用（方便你回頭對帳），匯率你手動輸入即可。`;
+
+    toast('已存入 RMB→TWD 記錄（已扣餘額）');
+    renderLedger();
+  });
+
   // export/import backup (JSON -> clipboard)
   $('#export_btn').addEventListener('click', async ()=>{
     const payload = {
       app: 'change-pay-hr',
-      version: 2,
+      version: 21,
       exportedAt: nowISO(),
       ledger: loadLedger(),
       batch: loadBatch()
