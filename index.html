@@ -3,11 +3,17 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+
   <meta name="theme-color" content="#0b3d2e" />
   <title>港幣換人民幣｜85%給對方 15%留存</title>
 
-  <link rel="manifest" href="manifest.json" />
-  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <!-- ✅ PWA：GitHub Pages 子路徑穩定寫法（相對路徑 + ./） -->
+  <link rel="manifest" href="./manifest.json" />
+
+  <!-- ✅ iOS 安裝到主畫面（不影響 Android） -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <link rel="apple-touch-icon" href="./icons/icon-192.png" />
 
   <style>
     :root{
@@ -254,12 +260,14 @@
   <div class="toast" id="toast">已複製</div>
 
 <script>
-  // PWA: register service worker
+  // ✅ PWA: register service worker（GitHub Pages 子路徑：一定要加 scope './'）
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', async () => {
       try {
-        await navigator.serviceWorker.register('./sw.js');
-      } catch (e) {}
+        await navigator.serviceWorker.register('./sw.js', { scope: './' });
+      } catch (e) {
+        // 不擋頁面運作
+      }
     });
   }
 
@@ -309,7 +317,6 @@
       await navigator.clipboard.writeText(text);
       toast('已複製');
     }catch{
-      // fallback
       const ta = document.createElement('textarea');
       ta.value = text;
       document.body.appendChild(ta);
@@ -384,7 +391,6 @@
     els.pctMeShow.textContent = `${pctMe}%`;
     els.formulaLine.textContent = `HKD ${fmt(hkd)} × rate ${fmt(rate,4)} = RMB ${fmt(total)}`;
 
-    // checksum
     const diff = (other + me) - total;
     els.checkSum.textContent = fmt(diff, 4);
     if (Math.abs(sumPct - 100) > 0.0001){
@@ -422,13 +428,11 @@
     calc();
   }
 
-  // events
   els.btnCalc.addEventListener('click', () => {
     const res = calc();
     if (res) pushHistory(res);
   });
 
-  // auto-calc while typing (no push history)
   ['input','change'].forEach(evt=>{
     els.hkd.addEventListener(evt, calc);
     els.rate.addEventListener(evt, calc);
@@ -464,7 +468,6 @@ RMB 總額：${fmt(res.total)}
     toast('已清空紀錄');
   });
 
-  // network pill
   function updateNet(){
     const on = navigator.onLine;
     els.netStatus.textContent = on ? '目前狀態：在線' : '目前狀態：離線（仍可用）';
@@ -472,7 +475,6 @@ RMB 總額：${fmt(res.total)}
   window.addEventListener('online', updateNet);
   window.addEventListener('offline', updateNet);
 
-  // init
   updateNet();
   renderHistory();
   calc();
