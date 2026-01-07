@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#0b3d2e" />
   <title>港幣換人民幣｜85%給對方 15%留存</title>
 
-  <!-- ✅ GitHub Pages 子路徑穩：全部用 ./ -->
+  <!-- ✅ 依你 repo：icon 在根目錄 -->
   <link rel="manifest" href="./manifest.json" />
   <link rel="apple-touch-icon" href="./icon-192.png" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -24,7 +24,6 @@
       --danger:#b42318;
       --shadow:0 10px 24px rgba(16,32,24,.10);
       --radius:18px;
-      font-synthesis-weight:none;
     }
     *{box-sizing:border-box}
     body{
@@ -163,6 +162,7 @@
     </div>
 
     <div class="grid">
+      <!-- Left: Calculator -->
       <section class="card">
         <div class="hd">
           <div class="t">輸入資料</div>
@@ -193,6 +193,7 @@
 
           <div class="actions">
             <button class="btn-primary" id="btnCalc">計算</button>
+            <button class="btn-ghost" id="btnRateLink">查詢今日匯率</button>
             <button class="btn-ghost" id="btnCopyOther">複製「給對方」</button>
             <button class="btn-ghost" id="btnCopyAll">複製完整明細</button>
             <button class="btn-danger" id="btnClear">清空</button>
@@ -205,6 +206,7 @@
         </div>
       </section>
 
+      <!-- Right: Results + History -->
       <section class="card">
         <div class="hd">
           <div class="t">計算結果</div>
@@ -248,7 +250,7 @@
 
     <div class="footer">
       <div>✅ 可安裝到手機桌面（iPhone 用「分享→加入主畫面」，Android/Chrome 會跳出安裝）。</div>
-      <div class="tiny">若你想加：固定某天匯率、或自動帶入常用匯率，我也能幫你升級。</div>
+      <div class="tiny">匯率查詢：點「查詢今日匯率」會開啟新浪行情頁（HKD→CNY）。</div>
     </div>
   </div>
 
@@ -272,6 +274,7 @@
     pctOther: $('pctOther'),
     pctMe: $('pctMe'),
     btnCalc: $('btnCalc'),
+    btnRateLink: $('btnRateLink'),
     btnCopyOther: $('btnCopyOther'),
     btnCopyAll: $('btnCopyAll'),
     btnClear: $('btnClear'),
@@ -289,6 +292,7 @@
     netStatus: $('netStatus'),
   };
 
+  const RATE_URL = 'https://gu.sina.cn/quotes/fx/HKDCNY';
   const LS_KEY = 'hkd_rmb_15_history_v1';
 
   function toNum(v){
@@ -424,6 +428,11 @@
   els.btnCalc.addEventListener('click', () => {
     const res = calc();
     if (res) pushHistory(res);
+  });
+
+  // ✅ 查詢今日匯率（點開連結）
+  els.btnRateLink.addEventListener('click', () => {
+    window.open(RATE_URL, '_blank');
   });
 
   ['input','change'].forEach(evt=>{
