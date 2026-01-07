@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#0b3d2e" />
+  <title>港幣換人民幣｜85%給對方 15%留存</title>
+
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+
+  <style>
+    :root{
+      --bg:#0b3d2e;
+      --card:#ffffff;
+      --text:#102018;
+      --muted:#66746c;
+      --line:#e6eee9;
+      --soft:#f4faf7;
+      --accent:#1f7a5b;
+      --danger:#b42318;
+      --shadow:0 10px 24px rgba(16,32,24,.10);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", Arial, sans-serif;
+      background:linear-gradient(180deg, #073023 0%, #0b3d2e 40%, #083226 100%);
+      color:#fff;
+      min-height:100vh;
+    }
+    .wrap{max-width:980px;margin:0 auto;padding:18px 14px 40px}
+    .top{
+      display:flex; align-items:flex-start; justify-content:space-between; gap:12px;
+      padding:10px 6px 16px;
+    }
+    .brand h1{margin:0;font-size:20px;letter-spacing:.5px}
+    .brand p{margin:6px 0 0;color:rgba(255,255,255,.82);font-size:13px;line-height:1.4}
+    .pill{
+      display:inline-flex; gap:8px; align-items:center;
+      padding:8px 10px; border:1px solid rgba(255,255,255,.18);
+      border-radius:999px; font-size:12px; color:rgba(255,255,255,.9);
+      background:rgba(255,255,255,.06);
+      user-select:none;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:12px;
+    }
+    @media (max-width:860px){
+      .grid{grid-template-columns:1fr}
+    }
+    .card{
+      background:var(--card);
+      color:var(--text);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      border:1px solid rgba(16,32,24,.06);
+      overflow:hidden;
+    }
+    .card .hd{
+      padding:14px 14px 10px;
+      border-bottom:1px solid var(--line);
+      background:linear-gradient(180deg, #ffffff 0%, #fbfdfc 100%);
+    }
+    .card .hd .t{font-weight:800; font-size:15px}
+    .card .hd .s{margin-top:6px; color:var(--muted); font-size:12px; line-height:1.4}
+    .card .bd{padding:14px}
+    .row{display:grid; grid-template-columns: 1fr 1fr; gap:10px}
+    @media (max-width:520px){ .row{grid-template-columns:1fr} }
+    label{display:block;font-size:12px;color:var(--muted);margin:0 0 6px}
+    input{
+      width:100%;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:#fff;
+      font-size:16px;
+      outline:none;
+    }
+    input:focus{border-color:rgba(31,122,91,.45); box-shadow:0 0 0 4px rgba(31,122,91,.12)}
+    .actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px}
+    button{
+      border:0;
+      border-radius:14px;
+      padding:12px 14px;
+      font-weight:800;
+      cursor:pointer;
+      box-shadow:0 8px 18px rgba(16,32,24,.10);
+    }
+    .btn-primary{background:var(--accent); color:#fff}
+    .btn-ghost{background:var(--soft); color:var(--text); border:1px solid var(--line); box-shadow:none}
+    .btn-danger{background:#fff; color:var(--danger); border:1px solid rgba(180,35,24,.25); box-shadow:none}
+    .note{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:14px;
+      background:var(--soft);
+      border:1px dashed rgba(31,122,91,.25);
+      color:#1f3b2f;
+      font-size:12px;
+      line-height:1.5;
+    }
+    .kpi{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    .k{
+      padding:12px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:#fff;
+    }
+    .k .lbl{font-size:12px;color:var(--muted)}
+    .k .val{margin-top:8px;font-size:20px;font-weight:900;letter-spacing:.2px}
+    .k .sub{margin-top:6px;font-size:12px;color:var(--muted)}
+    .divider{height:1px;background:var(--line);margin:12px 0}
+    .list{
+      margin:0; padding:0; list-style:none;
+      max-height:340px; overflow:auto;
+    }
+    .item{
+      display:flex; justify-content:space-between; gap:10px;
+      padding:10px 0; border-bottom:1px solid var(--line);
+      font-size:12px;
+    }
+    .item:last-child{border-bottom:0}
+    .mono{font-variant-numeric: tabular-nums; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;}
+    .toast{
+      position:fixed; left:50%; bottom:18px; transform:translateX(-50%);
+      background:rgba(0,0,0,.78); color:#fff;
+      padding:10px 12px; border-radius:999px;
+      font-size:12px; opacity:0; pointer-events:none;
+      transition:opacity .18s ease;
+    }
+    .toast.show{opacity:1}
+    .footer{
+      margin-top:14px;
+      color:rgba(255,255,255,.85);
+      font-size:12px;
+      padding:0 6px;
+      line-height:1.5;
+    }
+    .tiny{opacity:.9}
+    .linklike{color:#d9fff2; text-decoration:underline; text-underline-offset:2px}
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div class="brand">
+        <h1>港幣 → 人民幣｜85%給對方・15%留存</h1>
+        <p>輸入港幣金額與匯率（HKD→RMB），自動算：兌換總額、對方 85%、你留 15%。</p>
+      </div>
+      <div class="pill" id="netStatus">離線可用：準備中</div>
+    </div>
+
+    <div class="grid">
+      <!-- Left: Calculator -->
+      <section class="card">
+        <div class="hd">
+          <div class="t">輸入資料</div>
+          <div class="s">計算公式：RMB總額 = HKD × 匯率；對方 = RMB總額 × 0.85；你留 = RMB總額 × 0.15</div>
+        </div>
+        <div class="bd">
+          <div class="row">
+            <div>
+              <label for="hkd">收款港幣 HKD</label>
+              <input id="hkd" inputmode="decimal" placeholder="例如：1000" />
+            </div>
+            <div>
+              <label for="rate">匯率（1 HKD = ? RMB）</label>
+              <input id="rate" inputmode="decimal" placeholder="例如：0.92" />
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:10px">
+            <div>
+              <label for="pctOther">給對方比例（%）</label>
+              <input id="pctOther" inputmode="decimal" value="85" />
+            </div>
+            <div>
+              <label for="pctMe">我留比例（%）</label>
+              <input id="pctMe" inputmode="decimal" value="15" />
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="btn-primary" id="btnCalc">計算</button>
+            <button class="btn-ghost" id="btnCopyOther">複製「給對方」</button>
+            <button class="btn-ghost" id="btnCopyAll">複製完整明細</button>
+            <button class="btn-danger" id="btnClear">清空</button>
+          </div>
+
+          <div class="note">
+            小提醒：如果你只想固定 85/15，就不要改比例欄位。<br/>
+            若你把比例改了，系統會自動檢查「兩者加總是否為 100%」。
+          </div>
+        </div>
+      </section>
+
+      <!-- Right: Results + History -->
+      <section class="card">
+        <div class="hd">
+          <div class="t">計算結果</div>
+          <div class="s">可直接複製貼給對方（不業配、不囉嗦）。</div>
+        </div>
+        <div class="bd">
+          <div class="kpi">
+            <div class="k">
+              <div class="lbl">兌換人民幣總額（RMB）</div>
+              <div class="val mono" id="rmbTotal">—</div>
+              <div class="sub tiny mono" id="formulaLine">—</div>
+            </div>
+            <div class="k">
+              <div class="lbl">給對方（RMB）</div>
+              <div class="val mono" id="rmbOther">—</div>
+              <div class="sub">比例：<span class="mono" id="pctOtherShow">85%</span></div>
+            </div>
+            <div class="k">
+              <div class="lbl">我留（RMB）</div>
+              <div class="val mono" id="rmbMe">—</div>
+              <div class="sub">比例：<span class="mono" id="pctMeShow">15%</span></div>
+            </div>
+            <div class="k">
+              <div class="lbl">差額檢查</div>
+              <div class="val mono" id="checkSum">—</div>
+              <div class="sub tiny" id="checkHint">—</div>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+            <div style="font-weight:900">最近 10 筆</div>
+            <button class="btn-ghost" id="btnClearHistory" style="padding:10px 12px">清空紀錄</button>
+          </div>
+
+          <ul class="list" id="history"></ul>
+        </div>
+      </section>
+    </div>
+
+    <div class="footer">
+      <div>✅ 可安裝到手機桌面（iPhone 用「分享→加入主畫面」，Android/Chrome 會跳出安裝）。</div>
+      <div class="tiny">若你想加：固定某天匯率、或自動帶入常用匯率，我也能幫你升級。</div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">已複製</div>
+
+<script>
+  // PWA: register service worker
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', async () => {
+      try {
+        await navigator.serviceWorker.register('./sw.js');
+      } catch (e) {}
+    });
+  }
+
+  const $ = (id) => document.getElementById(id);
+
+  const els = {
+    hkd: $('hkd'),
+    rate: $('rate'),
+    pctOther: $('pctOther'),
+    pctMe: $('pctMe'),
+    btnCalc: $('btnCalc'),
+    btnCopyOther: $('btnCopyOther'),
+    btnCopyAll: $('btnCopyAll'),
+    btnClear: $('btnClear'),
+    rmbTotal: $('rmbTotal'),
+    rmbOther: $('rmbOther'),
+    rmbMe: $('rmbMe'),
+    pctOtherShow: $('pctOtherShow'),
+    pctMeShow: $('pctMeShow'),
+    formulaLine: $('formulaLine'),
+    checkSum: $('checkSum'),
+    checkHint: $('checkHint'),
+    toast: $('toast'),
+    history: $('history'),
+    btnClearHistory: $('btnClearHistory'),
+    netStatus: $('netStatus'),
+  };
+
+  const LS_KEY = 'hkd_rmb_15_history_v1';
+
+  function toNum(v){
+    if (v === null || v === undefined) return NaN;
+    const s = String(v).replace(/,/g,'').trim();
+    return s === '' ? NaN : Number(s);
+  }
+  function fmt(n, digits=2){
+    if (!Number.isFinite(n)) return '—';
+    return n.toLocaleString('zh-Hant', { minimumFractionDigits: digits, maximumFractionDigits: digits });
+  }
+  function toast(msg='已複製'){
+    els.toast.textContent = msg;
+    els.toast.classList.add('show');
+    setTimeout(()=>els.toast.classList.remove('show'), 1200);
+  }
+  async function copyText(text){
+    try{
+      await navigator.clipboard.writeText(text);
+      toast('已複製');
+    }catch{
+      // fallback
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      ta.remove();
+      toast('已複製');
+    }
+  }
+  function loadHistory(){
+    try{
+      const arr = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
+      return Array.isArray(arr) ? arr : [];
+    }catch{ return []; }
+  }
+  function saveHistory(arr){
+    localStorage.setItem(LS_KEY, JSON.stringify(arr.slice(0,10)));
+  }
+  function renderHistory(){
+    const arr = loadHistory();
+    els.history.innerHTML = arr.length ? '' : `<li class="item" style="color:#66746c">尚無紀錄</li>`;
+    for (const it of arr){
+      const left = `<div>
+        <div class="mono"><b>HKD</b> ${fmt(it.hkd)} × <b>rate</b> ${fmt(it.rate, 4)} = <b>RMB</b> ${fmt(it.total)}</div>
+        <div class="mono" style="color:#66746c;margin-top:4px">對方 ${fmt(it.other)}（${it.pctOther}%）｜我留 ${fmt(it.me)}（${it.pctMe}%）</div>
+      </div>`;
+      const right = `<div class="mono" style="color:#66746c;white-space:nowrap">${it.time}</div>`;
+      const li = document.createElement('li');
+      li.className = 'item';
+      li.innerHTML = left + right;
+      els.history.appendChild(li);
+    }
+  }
+
+  function nowStr(){
+    const d = new Date();
+    const pad = (x)=>String(x).padStart(2,'0');
+    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  }
+
+  function calc(){
+    const hkd = toNum(els.hkd.value);
+    const rate = toNum(els.rate.value);
+    let pctOther = toNum(els.pctOther.value);
+    let pctMe = toNum(els.pctMe.value);
+
+    if (!Number.isFinite(pctOther)) pctOther = 85;
+    if (!Number.isFinite(pctMe)) pctMe = 15;
+
+    const sumPct = pctOther + pctMe;
+
+    if (!Number.isFinite(hkd) || !Number.isFinite(rate) || hkd < 0 || rate < 0){
+      els.rmbTotal.textContent = '—';
+      els.rmbOther.textContent = '—';
+      els.rmbMe.textContent = '—';
+      els.formulaLine.textContent = '請先輸入 HKD 與匯率';
+      els.checkSum.textContent = '—';
+      els.checkHint.textContent = '—';
+      els.pctOtherShow.textContent = `${pctOther}%`;
+      els.pctMeShow.textContent = `${pctMe}%`;
+      return null;
+    }
+
+    const total = hkd * rate;
+    const other = total * (pctOther/100);
+    const me = total * (pctMe/100);
+
+    els.rmbTotal.textContent = fmt(total);
+    els.rmbOther.textContent = fmt(other);
+    els.rmbMe.textContent = fmt(me);
+    els.pctOtherShow.textContent = `${pctOther}%`;
+    els.pctMeShow.textContent = `${pctMe}%`;
+    els.formulaLine.textContent = `HKD ${fmt(hkd)} × rate ${fmt(rate,4)} = RMB ${fmt(total)}`;
+
+    // checksum
+    const diff = (other + me) - total;
+    els.checkSum.textContent = fmt(diff, 4);
+    if (Math.abs(sumPct - 100) > 0.0001){
+      els.checkHint.textContent = `目前比例加總 = ${fmt(sumPct, 2)}%，建議調整成 100%`;
+      els.checkHint.style.color = '#b42318';
+    }else{
+      els.checkHint.textContent = `比例加總 = 100%，差額為四捨五入誤差（正常）`;
+      els.checkHint.style.color = '#66746c';
+    }
+
+    return { hkd, rate, pctOther, pctMe, total, other, me };
+  }
+
+  function pushHistory(res){
+    const arr = loadHistory();
+    arr.unshift({
+      hkd: res.hkd,
+      rate: res.rate,
+      pctOther: res.pctOther,
+      pctMe: res.pctMe,
+      total: res.total,
+      other: res.other,
+      me: res.me,
+      time: nowStr()
+    });
+    saveHistory(arr);
+    renderHistory();
+  }
+
+  function clearAll(){
+    els.hkd.value = '';
+    els.rate.value = '';
+    els.pctOther.value = '85';
+    els.pctMe.value = '15';
+    calc();
+  }
+
+  // events
+  els.btnCalc.addEventListener('click', () => {
+    const res = calc();
+    if (res) pushHistory(res);
+  });
+
+  // auto-calc while typing (no push history)
+  ['input','change'].forEach(evt=>{
+    els.hkd.addEventListener(evt, calc);
+    els.rate.addEventListener(evt, calc);
+    els.pctOther.addEventListener(evt, calc);
+    els.pctMe.addEventListener(evt, calc);
+  });
+
+  els.btnCopyOther.addEventListener('click', async () => {
+    const res = calc();
+    if (!res) return toast('先輸入資料');
+    const text = `給你人民幣：${fmt(res.other)}（總額 ${fmt(res.total)} × ${res.pctOther}%）`;
+    await copyText(text);
+  });
+
+  els.btnCopyAll.addEventListener('click', async () => {
+    const res = calc();
+    if (!res) return toast('先輸入資料');
+    const text =
+`兌換明細
+HKD：${fmt(res.hkd)}
+匯率：1 HKD = ${fmt(res.rate,4)} RMB
+RMB 總額：${fmt(res.total)}
+給對方（${res.pctOther}%）：${fmt(res.other)}
+我留（${res.pctMe}%）：${fmt(res.me)}`;
+    await copyText(text);
+  });
+
+  els.btnClear.addEventListener('click', clearAll);
+
+  els.btnClearHistory.addEventListener('click', () => {
+    localStorage.removeItem(LS_KEY);
+    renderHistory();
+    toast('已清空紀錄');
+  });
+
+  // network pill
+  function updateNet(){
+    const on = navigator.onLine;
+    els.netStatus.textContent = on ? '目前狀態：在線' : '目前狀態：離線（仍可用）';
+  }
+  window.addEventListener('online', updateNet);
+  window.addEventListener('offline', updateNet);
+
+  // init
+  updateNet();
+  renderHistory();
+  calc();
+</script>
+</body>
+</html>
