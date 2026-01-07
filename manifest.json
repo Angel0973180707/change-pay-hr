@@ -1,13 +1,25 @@
 {
-  "name": "港幣換人民幣｜85%給對方 15%留存",
-  "short_name": "HKD→RMB 85/15",
-  "start_url": "./",
+  "name": "港幣換人民幣｜85/15 記帳與餘額",
+  "short_name": "換匯85/15",
+  "description": "HKD→RMB 批次加總、換匯結帳、按月記帳與餘額管理（我留自動累積，可存入/領出）。",
+  "start_url": "./?source=pwa",
   "scope": "./",
   "display": "standalone",
   "background_color": "#0b3d2e",
   "theme_color": "#0b3d2e",
   "icons": [
-    { "src": "./icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png" }
-  ]
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "lang": "zh-Hant-TW"
 }
