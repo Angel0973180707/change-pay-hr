@@ -3,17 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-
   <meta name="theme-color" content="#0b3d2e" />
   <title>港幣換人民幣｜85%給對方 15%留存</title>
 
-  <!-- ✅ PWA：GitHub Pages 子路徑穩定寫法（相對路徑 + ./） -->
+  <!-- ✅ GitHub Pages 子路徑穩：一律用 ./ -->
   <link rel="manifest" href="./manifest.json" />
-
-  <!-- ✅ iOS 安裝到主畫面（不影響 Android） -->
+  <link rel="apple-touch-icon" href="./icons/icon-192.png" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <link rel="apple-touch-icon" href="./icons/icon-192.png" />
 
   <style>
     :root{
@@ -25,8 +22,10 @@
       --soft:#f4faf7;
       --accent:#1f7a5b;
       --danger:#b42318;
+      --ok:#067647;
       --shadow:0 10px 24px rgba(16,32,24,.10);
       --radius:18px;
+      font-synthesis-weight:none;
     }
     *{box-sizing:border-box}
     body{
@@ -260,14 +259,12 @@
   <div class="toast" id="toast">已複製</div>
 
 <script>
-  // ✅ PWA: register service worker（GitHub Pages 子路徑：一定要加 scope './'）
+  // ✅ GitHub Pages：註冊 SW 一定要把 scope 固定在 ./（子路徑才會被視為同一個 app）
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', async () => {
       try {
         await navigator.serviceWorker.register('./sw.js', { scope: './' });
-      } catch (e) {
-        // 不擋頁面運作
-      }
+      } catch (e) {}
     });
   }
 
@@ -337,5 +334,148 @@
   }
   function renderHistory(){
     const arr = loadHistory();
-    els.history.innerHTML = arr.length ? '' : `<li class="item" style="color
+    els.history.innerHTML = arr.length ? '' : `<li class="item" style="color:#66746c">尚無紀錄</li>`;
+    for (const it of arr){
+      const left = `<div>
+        <div class="mono"><b>HKD</b> ${fmt(it.hkd)} × <b>rate</b> ${fmt(it.rate, 4)} = <b>RMB</b> ${fmt(it.total)}</div>
+        <div class="mono" style="color:#66746c;margin-top:4px">對方 ${fmt(it.other)}（${it.pctOther}%）｜我留 ${fmt(it.me)}（${it.pctMe}%）</div>
+      </div>`;
+      const right = `<div class="mono" style="color:#66746c;white-space:nowrap">${it.time}</div>`;
+      const li = document.createElement('li');
+      li.className = 'item';
+      li.innerHTML = left + right;
+      els.history.appendChild(li);
+    }
+  }
+
+  function nowStr(){
+    const d = new Date();
+    const pad = (x)=>String(x).padStart(2,'0');
+    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  }
+
+  function calc(){
+    const hkd = toNum(els.hkd.value);
+    const rate = toNum(els.rate.value);
+    let pctOther = toNum(els.pctOther.value);
+    let pctMe = toNum(els.pctMe.value);
+
+    if (!Number.isFinite(pctOther)) pctOther = 85;
+    if (!Number.isFinite(pctMe)) pctMe = 15;
+
+    const sumPct = pctOther + pctMe;
+
+    if (!Number.isFinite(hkd) || !Number.isFinite(rate) || hkd < 0 || rate < 0){
+      els.rmbTotal.textContent = '—';
+      els.rmbOther.textContent = '—';
+      els.rmbMe.textContent = '—';
+      els.formulaLine.textContent = '請先輸入 HKD 與匯率';
+      els.checkSum.textContent = '—';
+      els.checkHint.textContent = '—';
+      els.pctOtherShow.textContent = `${pctOther}%`;
+      els.pctMeShow.textContent = `${pctMe}%`;
+      return null;
+    }
+
+    const total = hkd * rate;
+    const other = total * (pctOther/100);
+    const me = total * (pctMe/100);
+
+    els.rmbTotal.textContent = fmt(total);
+    els.rmbOther.textContent = fmt(other);
+    els.rmbMe.textContent = fmt(me);
+    els.pctOtherShow.textContent = `${pctOther}%`;
+    els.pctMeShow.textContent = `${pctMe}%`;
+    els.formulaLine.textContent = `HKD ${fmt(hkd)} × rate ${fmt(rate,4)} = RMB ${fmt(total)}`;
+
+    const diff = (other + me) - total;
+    els.checkSum.textContent = fmt(diff, 4);
+    if (Math.abs(sumPct - 100) > 0.0001){
+      els.checkHint.textContent = `目前比例加總 = ${fmt(sumPct, 2)}%，建議調整成 100%`;
+      els.checkHint.style.color = '#b42318';
+    }else{
+      els.checkHint.textContent = `比例加總 = 100%，差額為四捨五入誤差（正常）`;
+      els.checkHint.style.color = '#66746c';
+    }
+
+    return { hkd, rate, pctOther, pctMe, total, other, me };
+  }
+
+  function pushHistory(res){
+    const arr = loadHistory();
+    arr.unshift({
+      hkd: res.hkd,
+      rate: res.rate,
+      pctOther: res.pctOther,
+      pctMe: res.pctMe,
+      total: res.total,
+      other: res.other,
+      me: res.me,
+      time: nowStr()
+    });
+    saveHistory(arr);
+    renderHistory();
+  }
+
+  function clearAll(){
+    els.hkd.value = '';
+    els.rate.value = '';
+    els.pctOther.value = '85';
+    els.pctMe.value = '15';
+    calc();
+  }
+
+  els.btnCalc.addEventListener('click', () => {
+    const res = calc();
+    if (res) pushHistory(res);
+  });
+
+  ['input','change'].forEach(evt=>{
+    els.hkd.addEventListener(evt, calc);
+    els.rate.addEventListener(evt, calc);
+    els.pctOther.addEventListener(evt, calc);
+    els.pctMe.addEventListener(evt, calc);
+  });
+
+  els.btnCopyOther.addEventListener('click', async () => {
+    const res = calc();
+    if (!res) return toast('先輸入資料');
+    const text = `給你人民幣：${fmt(res.other)}（總額 ${fmt(res.total)} × ${res.pctOther}%）`;
+    await copyText(text);
+  });
+
+  els.btnCopyAll.addEventListener('click', async () => {
+    const res = calc();
+    if (!res) return toast('先輸入資料');
+    const text =
+`兌換明細
+HKD：${fmt(res.hkd)}
+匯率：1 HKD = ${fmt(res.rate,4)} RMB
+RMB 總額：${fmt(res.total)}
+給對方（${res.pctOther}%）：${fmt(res.other)}
+我留（${res.pctMe}%）：${fmt(res.me)}`;
+    await copyText(text);
+  });
+
+  els.btnClear.addEventListener('click', clearAll);
+
+  els.btnClearHistory.addEventListener('click', () => {
+    localStorage.removeItem(LS_KEY);
+    renderHistory();
+    toast('已清空紀錄');
+  });
+
+  function updateNet(){
+    const on = navigator.onLine;
+    els.netStatus.textContent = on ? '目前狀態：在線' : '目前狀態：離線（仍可用）';
+  }
+  window.addEventListener('online', updateNet);
+  window.addEventListener('offline', updateNet);
+
+  updateNet();
+  renderHistory();
+  calc();
+</script>
+</body>
+</html>
 
