@@ -1,4 +1,4 @@
-const CACHE_NAME = 'change-pay-hr-pwa-v4';
+const CACHE_NAME = 'change-pay-hr-pwa-v6';
 const ASSETS = [
   './',
   './index.html',
