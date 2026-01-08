@@ -189,6 +189,41 @@
       color:#0b3d2e;
       white-space:nowrap;
     }
+
+    /* 累加小清單 */
+    .adderBox{
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:16px;
+      padding:12px;
+    }
+    .adderTop{
+      display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
+      margin-bottom:8px;
+    }
+    .adderTop .title{font-weight:900}
+    .adderList{
+      list-style:none; padding:0; margin:8px 0 0;
+      max-height:220px; overflow:auto;
+      border-top:1px dashed var(--line);
+    }
+    .adderItem{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      padding:10px 0;
+      border-bottom:1px solid var(--line);
+      font-size:12px;
+    }
+    .adderItem:last-child{border-bottom:0}
+    .chipBtn{
+      border:1px solid rgba(180,35,24,.25);
+      background:#fff;
+      color:var(--danger);
+      font-weight:900;
+      padding:8px 10px;
+      border-radius:999px;
+      box-shadow:none;
+      cursor:pointer;
+    }
   </style>
 </head>
 
@@ -320,8 +355,9 @@ const RATE_CNYTWD = 'https://gu.sina.cn/quotes/fx/CNYTWD';
 /* ===========================
    Storage
 =========================== */
-const LS_PREF   = 'fx85_pref_v3';
+const LS_PREF   = 'fx85_pref_v4';
 const LS_LEDGER = 'fx85_ledger_v3';
+const LS_ADDER  = 'fx85_hkd_adder_v1';
 
 function loadPref(){
   try{ const o = JSON.parse(localStorage.getItem(LS_PREF)||'{}'); return o && typeof o==='object' ? o : {}; }
@@ -337,6 +373,22 @@ function loadLedger(){
 }
 function saveLedger(arr){
   localStorage.setItem(LS_LEDGER, JSON.stringify(arr||[]));
+}
+
+/* ===========================
+   HKD 累加（加總） storage
+=========================== */
+function loadAdder(){
+  try{
+    const arr = JSON.parse(localStorage.getItem(LS_ADDER) || '[]');
+    return Array.isArray(arr) ? arr : [];
+  }catch{ return []; }
+}
+function saveAdder(arr){
+  localStorage.setItem(LS_ADDER, JSON.stringify(arr||[]));
+}
+function adderSum(arr){
+  return arr.reduce((s,x)=>s + (Number(x.amount)||0), 0);
 }
 
 /* ===========================
@@ -387,7 +439,7 @@ function buildBackupPayload(){
   const ledger = loadLedger();
   const payload = {
     app: "fx85",
-    version: "3.1",
+    version: "4.0",
     exportedAt: nowISO(),
     ledger
   };
@@ -400,7 +452,6 @@ function exportBackup(){
   toast('已匯出備份');
 }
 function normalizeImportedPayload(obj){
-  // Accept either: {ledger:[...]} or directly array
   if (Array.isArray(obj)) return { ledger: obj };
   if (obj && typeof obj === 'object' && Array.isArray(obj.ledger)) return obj;
   return null;
@@ -427,7 +478,6 @@ async function importBackupFromFile(file){
   const incoming = norm.ledger.filter(x => x && typeof x === 'object');
   if (!incoming.length) return { ok:false, msg:'備份檔沒有可匯入資料' };
 
-  // Ensure essential fields for safety
   for (const it of incoming){
     if (!it.id) it.id = uid();
     if (!it.ts) it.ts = nowISO();
@@ -526,6 +576,52 @@ function fxCalcPreview(){
   return lastFx;
 }
 
+/* --- HKD 累加 UI --- */
+function renderAdder(){
+  const arr = loadAdder();
+  const sum = adderSum(arr);
+
+  const list = $('#adder_list');
+  const sumEl = $('#adder_sum');
+
+  sumEl.textContent = fmt(sum);
+
+  // 自動同步到「港幣加總金額」
+  const fxTotal = $('#fx_hkd_total');
+  if (fxTotal){
+    fxTotal.value = sum ? String(sum) : '';
+    fxCalcPreview();
+  }
+
+  if (!arr.length){
+    list.innerHTML = `<li class="adderItem muted">尚無累加項目</li>`;
+    return;
+  }
+
+  list.innerHTML = '';
+  arr.slice().reverse().forEach((it, idxFromEnd)=>{
+    const idx = arr.length - 1 - idxFromEnd; // 原索引
+    const li = document.createElement('li');
+    li.className = 'adderItem';
+    li.innerHTML = `
+      <div class="mono">HKD ${fmt(it.amount)} ${it.note ? `<span class="muted">｜${escapeHtml(it.note)}</span>` : ''}</div>
+      <button class="chipBtn" data-del-adder="${idx}">刪除</button>
+    `;
+    list.appendChild(li);
+  });
+
+  list.querySelectorAll('[data-del-adder]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const i = Number(btn.getAttribute('data-del-adder'));
+      const a = loadAdder();
+      a.splice(i,1);
+      saveAdder(a);
+      renderAdder();
+      toast('已刪除');
+    });
+  });
+}
+
 function renderFx(){
   panelLeft.innerHTML = `
     <div class="hd">
@@ -536,10 +632,42 @@ function renderFx(){
       <div class="tag">月份：<span class="mono">${currentMonth}</span></div>
     </div>
     <div class="bd">
+
+      <!-- ✅ 港幣累加（加總） -->
+      <div class="adderBox">
+        <div class="adderTop">
+          <div>
+            <div class="title">港幣累加（加總）</div>
+            <div class="muted" style="font-size:12px;margin-top:4px">逐筆加，系統自動算加總並帶入換匯。</div>
+          </div>
+          <div class="tag">加總 HKD：<span class="mono" id="adder_sum">—</span></div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="adder_amount">單筆港幣（HKD）</label>
+            <input id="adder_amount" inputmode="decimal" placeholder="例如：1200" />
+          </div>
+          <div>
+            <label for="adder_note">備註（選填）</label>
+            <input id="adder_note" placeholder="例如：某客戶/某筆" />
+          </div>
+        </div>
+
+        <div class="actions" style="margin-top:10px">
+          <button class="btn-primary" id="adder_add">加入累加</button>
+          <button class="btn-danger" id="adder_clear">清空累加</button>
+        </div>
+
+        <ul class="adderList" id="adder_list"></ul>
+      </div>
+
+      <div class="divider"></div>
+
       <div class="row">
         <div>
           <label for="fx_hkd_total">1) 港幣加總金額（HKD）</label>
-          <input id="fx_hkd_total" inputmode="decimal" placeholder="例如：10000" />
+          <input id="fx_hkd_total" inputmode="decimal" placeholder="（會自動由累加帶入，也可手打）" />
         </div>
         <div>
           <label for="fx_rate">3) 匯率（1 HKD = ? RMB）</label>
@@ -549,7 +677,7 @@ function renderFx(){
 
       <div style="margin-top:10px">
         <label for="fx_note">備註（選填）</label>
-        <input id="fx_note" placeholder="例如：某客戶 / 這次結帳" />
+        <input id="fx_note" placeholder="例如：這次結帳" />
       </div>
 
       <div class="actions">
@@ -699,15 +827,38 @@ function renderFx(){
   $('#m_next').addEventListener('click', ()=>{ currentMonth = shiftMonth(currentMonth,+1); renderFx(); });
   $('#goto_ledger').addEventListener('click', ()=>{ tab='ledger'; render(); });
 
+  // ✅ 累加事件
+  $('#adder_add').addEventListener('click', ()=>{
+    const amount = toNum($('#adder_amount').value);
+    const note = ($('#adder_note').value||'').trim();
+    if (!Number.isFinite(amount) || amount<=0) return toast('請輸入單筆港幣');
+
+    const arr = loadAdder();
+    arr.push({ amount, note, ts: nowISO() });
+    saveAdder(arr);
+
+    $('#adder_amount').value = '';
+    $('#adder_note').value = '';
+    renderAdder();
+    toast('已加入累加');
+  });
+
+  $('#adder_clear').addEventListener('click', ()=>{
+    saveAdder([]);
+    renderAdder();
+    toast('已清空累加');
+  });
+
+  // 也允許手打總額（會覆蓋累加帶入的值）
+  ['input','change'].forEach(evt=>{
+    $('#fx_hkd_total').addEventListener(evt, fxCalcPreview);
+    $('#fx_rate').addEventListener(evt, fxCalcPreview);
+  });
+
   $('#fx_btn_calc').addEventListener('click', ()=>{
     const res = fxCalcPreview();
     if (!res) return toast('請輸入港幣與匯率');
     toast('已計算');
-  });
-
-  ['input','change'].forEach(evt=>{
-    $('#fx_hkd_total').addEventListener(evt, fxCalcPreview);
-    $('#fx_rate').addEventListener(evt, fxCalcPreview);
   });
 
   $('#fx_btn_copy').addEventListener('click', async ()=>{
@@ -755,6 +906,8 @@ function renderFx(){
     renderFx();
   });
 
+  // init
+  renderAdder();
   fxCalcPreview();
   renderMonth();
 }
@@ -770,7 +923,7 @@ function renderLedger(){
     <div class="hd">
       <div>
         <div class="t">記帳簿（永久保存｜按月檢索｜手動增刪｜備註）</div>
-        <div class="s">新增：可匯出/匯入備份（JSON），換手機也不怕資料不見。</div>
+        <div class="s">可匯出/匯入備份（JSON），換手機也不怕資料不見。</div>
       </div>
       <div class="tag">月份：<span class="mono">${currentMonth}</span></div>
     </div>
@@ -975,7 +1128,7 @@ function renderLedger(){
   $('#backup_import').addEventListener('click', ()=> $('#backup_file').click());
   $('#backup_file').addEventListener('change', async (e)=>{
     const file = e.target.files && e.target.files[0];
-    e.target.value = ''; // allow reselect same file next time
+    e.target.value = '';
     if (!file) return;
     const res = await importBackupFromFile(file);
     if (!res.ok) return toast(res.msg);
@@ -1085,13 +1238,6 @@ function renderLedger(){
 /* ===========================
    Boot
 =========================== */
-function updateNetPill(){
-  const el = $('#netStatus');
-  el.textContent = navigator.onLine ? '目前狀態：在線' : '目前狀態：離線（仍可用）';
-}
-window.addEventListener('online', updateNetPill);
-window.addEventListener('offline', updateNetPill);
-
 render();
 updateNetPill();
 </script>
