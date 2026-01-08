@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="theme-color" content="#0b3d2e" />
-  <title>港幣→人民幣｜批次加總×按月記帳×餘額</title>
+  <title>港幣85%換匯｜按月記帳簿</title>
 
   <link rel="manifest" href="./manifest.json" />
   <link rel="apple-touch-icon" href="./icon-192.png" />
@@ -20,7 +20,6 @@
       --soft:#f4faf7;
       --accent:#1f7a5b;
       --danger:#b42318;
-      --warn:#b54708;
       --shadow:0 10px 24px rgba(16,32,24,.10);
       --radius:18px;
     }
@@ -35,22 +34,20 @@
     .wrap{max-width:1120px;margin:0 auto;padding:18px 14px 44px}
     .top{
       display:flex; align-items:flex-start; justify-content:space-between; gap:12px;
-      padding:10px 6px 10px;
+      padding:10px 6px 12px;
     }
     .brand h1{margin:0;font-size:20px;letter-spacing:.5px}
-    .brand p{margin:6px 0 0;color:rgba(255,255,255,.82);font-size:13px;line-height:1.4}
+    .brand p{margin:6px 0 0;color:rgba(255,255,255,.82);font-size:13px;line-height:1.45}
     .pill{
       display:inline-flex; gap:8px; align-items:center;
       padding:8px 10px; border:1px solid rgba(255,255,255,.18);
-      border-radius:999px; font-size:12px; color:rgba(255,255,255,.9);
+      border-radius:999px; font-size:12px; color:rgba(255,255,255,.92);
       background:rgba(255,255,255,.06);
       user-select:none;
       white-space:nowrap;
     }
-    .tabs{
-      display:flex; gap:10px; flex-wrap:wrap;
-      padding:0 6px 14px;
-    }
+
+    .tabs{display:flex; gap:10px; flex-wrap:wrap; padding:0 6px 14px}
     .tab{
       border:1px solid rgba(255,255,255,.18);
       background:rgba(255,255,255,.06);
@@ -61,19 +58,14 @@
       cursor:pointer;
       user-select:none;
     }
-    .tab.active{
-      background:rgba(255,255,255,.14);
-      border-color:rgba(255,255,255,.30);
-    }
+    .tab.active{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.32)}
 
     .grid{
       display:grid;
       grid-template-columns: 1.05fr .95fr;
       gap:12px;
     }
-    @media (max-width:940px){
-      .grid{grid-template-columns:1fr}
-    }
+    @media (max-width:940px){ .grid{grid-template-columns:1fr} }
 
     .card{
       background:var(--card);
@@ -83,7 +75,7 @@
       border:1px solid rgba(16,32,24,.06);
       overflow:hidden;
     }
-    .card .hd{
+    .hd{
       padding:14px 14px 10px;
       border-bottom:1px solid var(--line);
       background:linear-gradient(180deg, #ffffff 0%, #fbfdfc 100%);
@@ -92,11 +84,11 @@
       justify-content:space-between;
       gap:10px;
     }
-    .card .hd .t{font-weight:900; font-size:15px}
-    .card .hd .s{margin-top:6px; color:var(--muted); font-size:12px; line-height:1.4}
-    .card .bd{padding:14px}
+    .t{font-weight:900;font-size:15px}
+    .s{margin-top:6px;color:var(--muted);font-size:12px;line-height:1.45}
+    .bd{padding:14px}
 
-    .row{display:grid; grid-template-columns: 1fr 1fr; gap:10px}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
     @media (max-width:520px){ .row{grid-template-columns:1fr} }
 
     label{display:block;font-size:12px;color:var(--muted);margin:0 0 6px}
@@ -109,7 +101,7 @@
       font-size:16px;
       outline:none;
     }
-    textarea{min-height:120px; resize:vertical; font-size:14px}
+    textarea{min-height:84px;resize:vertical;font-size:14px}
     input:focus, textarea:focus, select:focus{border-color:rgba(31,122,91,.45); box-shadow:0 0 0 4px rgba(31,122,91,.12)}
 
     .actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px}
@@ -124,7 +116,6 @@
     .btn-primary{background:var(--accent); color:#fff}
     .btn-ghost{background:var(--soft); color:var(--text); border:1px solid var(--line); box-shadow:none}
     .btn-danger{background:#fff; color:var(--danger); border:1px solid rgba(180,35,24,.25); box-shadow:none}
-    .btn-warn{background:#fff; color:var(--warn); border:1px solid rgba(181,71,8,.25); box-shadow:none}
 
     .note{
       margin-top:10px;
@@ -134,14 +125,10 @@
       border:1px dashed rgba(31,122,91,.25);
       color:#1f3b2f;
       font-size:12px;
-      line-height:1.6;
+      line-height:1.65;
     }
 
-    .kpi{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:10px;
-    }
+    .kpi{display:grid;grid-template-columns:1fr 1fr;gap:10px}
     .k{
       padding:12px;
       border-radius:16px;
@@ -153,53 +140,21 @@
     .k .sub{margin-top:6px;font-size:12px;color:var(--muted)}
     .divider{height:1px;background:var(--line);margin:12px 0}
 
-    .list{
-      margin:0; padding:0; list-style:none;
-      max-height:460px; overflow:auto;
-    }
-    .item{
-      padding:10px 0; border-bottom:1px solid var(--line);
-      font-size:12px;
-    }
+    .list{margin:0;padding:0;list-style:none;max-height:520px;overflow:auto}
+    .item{padding:10px 0;border-bottom:1px solid var(--line);font-size:12px}
     .item:last-child{border-bottom:0}
 
-    .mono{font-variant-numeric: tabular-nums; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;}
+    .mono{font-variant-numeric: tabular-nums; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;}
     .muted{color:var(--muted)}
-    .tag{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      padding:4px 8px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background:var(--soft);
-      font-size:11px;
-      font-weight:900;
-      color:#0b3d2e;
+    a{color:#1f7a5b}
+    .footer{
+      margin-top:14px;
+      color:rgba(255,255,255,.88);
+      font-size:12px;
+      padding:0 6px;
+      line-height:1.7;
     }
-    .tag.out{color:var(--danger)}
-    .tag.in{color:var(--accent)}
-    .tag.fx{color:#0b3d2e}
-    .tag.tw{color:#0b3d2e}
-
-    .toolbar{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-    .toolbar .left{display:flex; align-items:center; gap:10px; flex-wrap:wrap}
-    .toolbar .right{display:flex; align-items:center; gap:10px; flex-wrap:wrap}
-    .smallbtn{
-      padding:10px 12px;
-      border-radius:12px;
-      font-weight:900;
-      border:1px solid var(--line);
-      background:var(--soft);
-      box-shadow:none;
-      cursor:pointer;
-    }
+    .footer a{color:#d9fff2}
 
     .toast{
       position:fixed; left:50%; bottom:18px; transform:translateX(-50%);
@@ -210,15 +165,30 @@
       z-index:50;
     }
     .toast.show{opacity:1}
-    .footer{
-      margin-top:14px;
-      color:rgba(255,255,255,.85);
-      font-size:12px;
-      padding:0 6px;
-      line-height:1.65;
+
+    .toolbar{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:10px; flex-wrap:wrap;
     }
-    a{color:#1f7a5b}
-    .footer a{color:#d9fff2}
+    .toolbar .left, .toolbar .right{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+    .smallbtn{
+      padding:10px 12px;
+      border-radius:12px;
+      font-weight:900;
+      border:1px solid var(--line);
+      background:var(--soft);
+      box-shadow:none;
+      cursor:pointer;
+    }
+    .tag{
+      display:inline-flex; align-items:center; gap:6px;
+      padding:4px 8px; border-radius:999px;
+      border:1px solid var(--line);
+      background:var(--soft);
+      font-size:11px; font-weight:900;
+      color:#0b3d2e;
+      white-space:nowrap;
+    }
   </style>
 </head>
 
@@ -226,16 +196,17 @@
   <div class="wrap">
     <div class="top">
       <div class="brand">
-        <h1>港幣 → 人民幣｜批次加總 × 按月記帳 × 餘額</h1>
-        <p>多筆 HKD 先加總→結帳換匯；我留自動進餘額；餘額可領出/存入；新增：RMB→TWD 換匯記錄（會扣餘額）。</p>
+        <h1>港幣 85% 全換 RMB｜按月記帳</h1>
+        <p>
+          規則：港幣加總×85% 才拿去換匯 → 換到的 RMB <b>全部給對方</b>；港幣 15% 直接扣除（不進換匯）。
+        </p>
       </div>
       <div class="pill" id="netStatus">狀態：—</div>
     </div>
 
     <div class="tabs">
-      <div class="tab" data-tab="batch">批次加總</div>
-      <div class="tab" data-tab="pay">換匯結帳</div>
-      <div class="tab" data-tab="ledger">記帳與餘額</div>
+      <div class="tab" data-tab="fx">換匯（85%→RMB）</div>
+      <div class="tab" data-tab="ledger">記帳簿（按月）</div>
     </div>
 
     <div class="grid">
@@ -244,8 +215,10 @@
     </div>
 
     <div class="footer">
-      <div>✅ 匯率查詢（你指定的連結）：<a href="https://gu.sina.cn/quotes/fx/HKDCNY" target="_blank" rel="noreferrer">HKD/CNY</a></div>
-      <div class="muted">提醒：此工具不自動抓匯率（跨域限制），你查完把匯率填回來即可。</div>
+      <div>✅ 匯率查詢（你指定的連結）</div>
+      <div>HKD→CNY：<a href="https://gu.sina.cn/quotes/fx/HKDCNY" target="_blank" rel="noreferrer">https://gu.sina.cn/quotes/fx/HKDCNY</a></div>
+      <div>CNY→TWD：<a href="https://gu.sina.cn/quotes/fx/CNYTWD" target="_blank" rel="noreferrer">https://gu.sina.cn/quotes/fx/CNYTWD</a></div>
+      <div class="muted">提醒：此工具不自動抓匯率（跨域限制），你點開看完再回來手動輸入即可。</div>
     </div>
   </div>
 
@@ -273,7 +246,6 @@ function toast(msg='完成'){
   el.classList.add('show');
   setTimeout(()=>el.classList.remove('show'), 1200);
 }
-
 async function copyText(text){
   try{
     await navigator.clipboard.writeText(text);
@@ -288,13 +260,11 @@ async function copyText(text){
     toast('已複製');
   }
 }
-
 function toNum(v){
   if (v === null || v === undefined) return NaN;
   const s = String(v).replace(/,/g,'').trim();
   return s === '' ? NaN : Number(s);
 }
-
 function fmt(n, digits=2){
   if (!Number.isFinite(n)) return '—';
   return n.toLocaleString('zh-Hant', { minimumFractionDigits: digits, maximumFractionDigits: digits });
@@ -329,22 +299,35 @@ function shiftMonth(ym, delta){
   const d = new Date(y, (m-1)+delta, 1);
   return yyyymm(d);
 }
+function downloadText(filename, text){
+  const blob = new Blob([text], { type: 'application/json;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
 
 /* ===========================
-   Storage Keys
+   Links (user-provided)
 =========================== */
-const RATE_URL = 'https://gu.sina.cn/quotes/fx/HKDCNY';
-const LS_LEDGER = 'change_pay_hr_ledger_v21';
-const LS_BATCH  = 'change_pay_hr_batch_v21';
-const LS_PREF   = 'change_pay_hr_pref_v21';
+const RATE_HKDCNY = 'https://gu.sina.cn/quotes/fx/HKDCNY';
+const RATE_CNYTWD = 'https://gu.sina.cn/quotes/fx/CNYTWD';
 
-/*
-  Ledger item types:
-  - exchange:      HKD->RMB 結帳（meRmb 自動累積）
-  - balance_in:    手動存入 RMB
-  - balance_out:   手動領出 RMB
-  - rmb_to_twd:    RMB->TWD 換匯記錄（RMB 會從餘額扣除）
-*/
+/* ===========================
+   Storage
+=========================== */
+const LS_PREF   = 'fx85_pref_v3';
+const LS_LEDGER = 'fx85_ledger_v3';
+
+function loadPref(){
+  try{ const o = JSON.parse(localStorage.getItem(LS_PREF)||'{}'); return o && typeof o==='object' ? o : {}; }
+  catch{ return {}; }
+}
+function savePref(o){ localStorage.setItem(LS_PREF, JSON.stringify(o||{})); }
 
 function loadLedger(){
   try{
@@ -353,803 +336,591 @@ function loadLedger(){
   }catch{ return []; }
 }
 function saveLedger(arr){
-  localStorage.setItem(LS_LEDGER, JSON.stringify(arr));
-}
-function loadBatch(){
-  try{
-    const obj = JSON.parse(localStorage.getItem(LS_BATCH) || '{"items":[]}');
-    if (!obj || typeof obj !== 'object') return { items: [] };
-    if (!Array.isArray(obj.items)) obj.items = [];
-    return obj;
-  }catch{ return { items: [] }; }
-}
-function saveBatch(obj){
-  localStorage.setItem(LS_BATCH, JSON.stringify(obj));
-}
-function loadPref(){
-  try{
-    const obj = JSON.parse(localStorage.getItem(LS_PREF) || '{}');
-    return obj && typeof obj === 'object' ? obj : {};
-  }catch{ return {}; }
-}
-function savePref(obj){
-  localStorage.setItem(LS_PREF, JSON.stringify(obj || {}));
+  localStorage.setItem(LS_LEDGER, JSON.stringify(arr||[]));
 }
 
-function calcBalance(all){
-  // 餘額（RMB）= Σ(meRmb from exchange) + Σ(balance_in) - Σ(balance_out) - Σ(rmb_to_twd.rmb)
-  let bal = 0;
-  for (const it of all){
-    if (it.type === 'exchange') bal += (Number(it.meRmb) || 0);
-    if (it.type === 'balance_in') bal += (Number(it.amountRmb) || 0);
-    if (it.type === 'balance_out') bal -= (Number(it.amountRmb) || 0);
-    if (it.type === 'rmb_to_twd') bal -= (Number(it.rmb) || 0);
-  }
-  return bal;
-}
-
+/* ===========================
+   Month summary
+=========================== */
 function monthSummary(all, month){
   const items = all.filter(x => x.month === month);
-  let sumHKD=0, sumRmb=0, sumOther=0, sumMe=0, sumIn=0, sumOut=0;
-  let sumRmbToTwdRmb=0, sumRmbToTwdTwd=0;
+  let fxCount=0;
+  let sumFxRmb=0;      // ⑤
+  let sumIncomeHKD=0;  // ⑥
+  let sumFxHKDTotal=0;
+  let sumManualIncomeHKD=0;
+  let sumRmbToTwdRmb=0;
+  let sumRmbToTwdTwd=0;
 
   for (const it of items){
-    if (it.type === 'exchange'){
-      sumHKD += Number(it.hkd)||0;
-      sumRmb += Number(it.totalRmb)||0;
-      sumOther += Number(it.otherRmb)||0;
-      sumMe += Number(it.meRmb)||0;
+    if (it.type === 'exchange85'){
+      fxCount++;
+      sumFxRmb += Number(it.rmbGiven)||0;
+      sumFxHKDTotal += Number(it.hkdTotal)||0;
     }
-    if (it.type === 'balance_in') sumIn += Number(it.amountRmb)||0;
-    if (it.type === 'balance_out') sumOut += Number(it.amountRmb)||0;
-
+    if (it.type === 'income' && it.currency === 'HKD'){
+      sumManualIncomeHKD += Number(it.amount)||0;
+    }
     if (it.type === 'rmb_to_twd'){
       sumRmbToTwdRmb += Number(it.rmb)||0;
       sumRmbToTwdTwd += Number(it.twd)||0;
     }
   }
-  return { count: items.length, sumHKD, sumRmb, sumOther, sumMe, sumIn, sumOut, sumRmbToTwdRmb, sumRmbToTwdTwd };
+  sumIncomeHKD = sumFxHKDTotal + sumManualIncomeHKD;
+
+  return {
+    count: items.length,
+    fxCount,
+    sumFxRmb,
+    sumIncomeHKD,
+    sumFxHKDTotal,
+    sumManualIncomeHKD,
+    sumRmbToTwdRmb,
+    sumRmbToTwdTwd
+  };
 }
 
 /* ===========================
-   UI State
+   Backup (Export / Import JSON)
+=========================== */
+function buildBackupPayload(){
+  const ledger = loadLedger();
+  const payload = {
+    app: "fx85",
+    version: "3.1",
+    exportedAt: nowISO(),
+    ledger
+  };
+  return payload;
+}
+function exportBackup(){
+  const payload = buildBackupPayload();
+  const file = `fx85-ledger-backup_${currentMonth}.json`;
+  downloadText(file, JSON.stringify(payload, null, 2));
+  toast('已匯出備份');
+}
+function normalizeImportedPayload(obj){
+  // Accept either: {ledger:[...]} or directly array
+  if (Array.isArray(obj)) return { ledger: obj };
+  if (obj && typeof obj === 'object' && Array.isArray(obj.ledger)) return obj;
+  return null;
+}
+function mergeLedger(existing, incoming){
+  const map = new Map(existing.map(x=>[x.id, x]));
+  for (const it of incoming){
+    if (it && it.id){
+      if (!map.has(it.id)) map.set(it.id, it);
+    }
+  }
+  const merged = Array.from(map.values());
+  merged.sort((a,b)=>(a.ts||'').localeCompare(b.ts||''));
+  return merged;
+}
+async function importBackupFromFile(file){
+  const text = await file.text();
+  let obj;
+  try{ obj = JSON.parse(text); }catch{ return { ok:false, msg:'檔案不是有效JSON' }; }
+
+  const norm = normalizeImportedPayload(obj);
+  if (!norm) return { ok:false, msg:'格式不符合（找不到 ledger）' };
+
+  const incoming = norm.ledger.filter(x => x && typeof x === 'object');
+  if (!incoming.length) return { ok:false, msg:'備份檔沒有可匯入資料' };
+
+  // Ensure essential fields for safety
+  for (const it of incoming){
+    if (!it.id) it.id = uid();
+    if (!it.ts) it.ts = nowISO();
+    if (!it.month) it.month = yyyymm(new Date(it.ts));
+  }
+
+  const existing = loadLedger();
+  const merged = mergeLedger(existing, incoming);
+  const added = merged.length - existing.length;
+  saveLedger(merged);
+  return { ok:true, msg:`已匯入完成，新增 ${added} 筆（同ID不重複）` };
+}
+
+/* ===========================
+   App state
 =========================== */
 const pref = loadPref();
-let currentTab = pref.tab || 'batch';
+let tab = pref.tab || 'fx';
 let currentMonth = pref.month || yyyymm(new Date());
 
 const panelLeft = $('#panelLeft');
 const panelRight = $('#panelRight');
 
-/* ===========================
-   Render root
-=========================== */
-function render(){
-  $$('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === currentTab));
-  pref.tab = currentTab;
-  pref.month = currentMonth;
-  savePref(pref);
-
-  if (currentTab === 'batch') renderBatch();
-  if (currentTab === 'pay') renderPay();
-  if (currentTab === 'ledger') renderLedger();
-  updateNetPill();
+function setActiveTab(){
+  $$('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
 }
 
 /* ===========================
-   Tab events
+   Network pill
 =========================== */
+function updateNetPill(){
+  const el = $('#netStatus');
+  el.textContent = navigator.onLine ? '目前狀態：在線' : '目前狀態：離線（仍可用）';
+}
+window.addEventListener('online', updateNetPill);
+window.addEventListener('offline', updateNetPill);
+
+/* ===========================
+   Render
+=========================== */
+function render(){
+  setActiveTab();
+  pref.tab = tab; pref.month = currentMonth;
+  savePref(pref);
+
+  if (tab === 'fx') renderFx();
+  if (tab === 'ledger') renderLedger();
+  updateNetPill();
+}
+
 $$('.tab').forEach(t=>{
   t.addEventListener('click', ()=>{
-    currentTab = t.dataset.tab;
+    tab = t.dataset.tab;
     render();
   });
 });
 
 /* ===========================
-   Batch: 多筆 HKD 加總
+   FX page (85% HKD -> RMB)
 =========================== */
-function renderBatch(){
-  const batch = loadBatch();
-  const items = batch.items || [];
-  const sumHKD = items.reduce((a,x)=>a + (Number(x.amount)||0), 0);
+let lastFx = null;
+let lastFxCopyText = '';
 
-  const ledger = loadLedger();
-  const bal = calcBalance(ledger);
+function fxCalcPreview(){
+  const hkdTotal = toNum($('#fx_hkd_total').value);
+  const rate = toNum($('#fx_rate').value);
 
-  panelLeft.innerHTML = `
-    <div class="hd">
-      <div>
-        <div class="t">批次加總（多筆 HKD 先加總）</div>
-        <div class="s">加入多筆 HKD → 自動加總 → 一鍵帶入「換匯結帳」。清單會保留，不怕關掉。</div>
-      </div>
-      <div class="tag in">餘額：<span class="mono">${fmt(bal)}</span> RMB</div>
-    </div>
-    <div class="bd">
-      <div class="row">
-        <div>
-          <label for="batch_amount">新增一筆 HKD 金額</label>
-          <input id="batch_amount" inputmode="decimal" placeholder="例如：500" />
-        </div>
-        <div>
-          <label for="batch_note">備註（選填）</label>
-          <input id="batch_note" placeholder="例如：某客戶/第1筆" />
-        </div>
-      </div>
-
-      <div class="actions">
-        <button class="btn-primary" id="batch_add">加入清單</button>
-        <button class="btn-ghost" id="batch_paste">從剪貼簿貼上（多行）</button>
-        <button class="btn-warn" id="batch_to_pay">帶入「換匯結帳」</button>
-        <button class="btn-danger" id="batch_clear">清空清單</button>
-      </div>
-
-      <div class="note">
-        你可以貼上多筆金額（每行一筆），例如：<br/>
-        500<br/>1200<br/>300<br/>
-        系統會自動抓數字加入清單並加總。
-      </div>
-    </div>
-  `;
-
-  panelRight.innerHTML = `
-    <div class="hd">
-      <div>
-        <div class="t">本次加總</div>
-        <div class="s">HKD 合計會顯示在右上角，並可一鍵帶入結帳。</div>
-      </div>
-      <div class="tag">HKD 合計：<span class="mono" id="batch_sum">${fmt(sumHKD)}</span></div>
-    </div>
-    <div class="bd">
-      <div class="kpi">
-        <div class="k">
-          <div class="lbl">筆數</div>
-          <div class="val mono">${items.length}</div>
-          <div class="sub">可持續累加</div>
-        </div>
-        <div class="k">
-          <div class="lbl">HKD 合計</div>
-          <div class="val mono">${fmt(sumHKD)}</div>
-          <div class="sub">帶入結帳</div>
-        </div>
-      </div>
-
-      <div class="divider"></div>
-      <div style="font-weight:900;margin-bottom:6px">清單</div>
-      <ul class="list" id="batch_list"></ul>
-    </div>
-  `;
-
-  const listEl = $('#batch_list');
-
-  function renderList(){
-    const b = loadBatch();
-    const its = b.items || [];
-    const sum = its.reduce((a,x)=>a + (Number(x.amount)||0), 0);
-    $('#batch_sum').textContent = fmt(sum);
-
-    if (!its.length){
-      listEl.innerHTML = `<li class="item muted">尚無清單</li>`;
-      return;
-    }
-    listEl.innerHTML = '';
-    its.forEach((it, idx)=>{
-      const li = document.createElement('li');
-      li.className = 'item';
-      li.innerHTML = `
-        <div style="display:flex;justify-content:space-between;gap:10px">
-          <div>
-            <div class="mono"><b>HKD</b> ${fmt(it.amount)}</div>
-            ${it.note ? `<div class="muted" style="margin-top:4px">備註：${escapeHtml(it.note)}</div>` : ``}
-            <div class="muted" style="margin-top:4px">${it.time || ''}</div>
-          </div>
-          <div style="white-space:nowrap">
-            <button class="smallbtn" data-rm="${idx}">刪除</button>
-          </div>
-        </div>
-      `;
-      listEl.appendChild(li);
-    });
-
-    listEl.querySelectorAll('[data-rm]').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        const i = Number(btn.getAttribute('data-rm'));
-        const b2 = loadBatch();
-        b2.items.splice(i,1);
-        saveBatch(b2);
-        toast('已刪除');
-        renderList();
-      });
-    });
+  if (!Number.isFinite(hkdTotal) || hkdTotal <= 0 || !Number.isFinite(rate) || rate <= 0){
+    lastFx = null;
+    lastFxCopyText = '';
+    $('#fx_res').textContent = '請輸入：港幣加總金額＋匯率';
+    $('#fx_k1').textContent = '—';
+    $('#fx_k2').textContent = '—';
+    $('#fx_k3').textContent = '—';
+    $('#fx_k4').textContent = '—';
+    return null;
   }
 
-  $('#batch_add').addEventListener('click', ()=>{
-    const amt = toNum($('#batch_amount').value);
-    const note = ($('#batch_note').value || '').trim();
-    if (!Number.isFinite(amt) || amt <= 0) return toast('請輸入金額');
+  const hkd85 = hkdTotal * 0.85;
+  const rmbGiven = hkd85 * rate;
 
-    const b = loadBatch();
-    b.items = b.items || [];
-    b.items.push({ amount: amt, note, time: nowStr() });
-    saveBatch(b);
+  lastFx = { hkdTotal, hkd85, rate, rmbGiven };
+  lastFxCopyText =
+`港幣加總：HKD ${fmt(hkdTotal)}
+換匯港幣（85%）：HKD ${fmt(hkd85)}
+匯率：1 HKD = ${fmt(rate,4)} RMB
+兌換人民幣：RMB ${fmt(rmbGiven)}`;
 
-    $('#batch_amount').value = '';
-    $('#batch_note').value = '';
-    toast('已加入');
-    renderList();
-  });
+  $('#fx_res').textContent = lastFxCopyText;
 
-  $('#batch_paste').addEventListener('click', async ()=>{
-    try{
-      const text = await navigator.clipboard.readText();
-      if (!text) return toast('剪貼簿沒有內容');
-      const nums = text
-        .split(/\r?\n|,|\s+/g)
-        .map(s=>s.trim())
-        .filter(Boolean)
-        .map(s=>Number(String(s).replace(/[^0-9.\-]/g,'')))
-        .filter(n=>Number.isFinite(n) && n > 0);
+  $('#fx_k1').textContent = fmt(hkdTotal);
+  $('#fx_k2').textContent = fmt(hkd85);
+  $('#fx_k3').textContent = fmt(rate,4);
+  $('#fx_k4').textContent = fmt(rmbGiven);
 
-      if (!nums.length) return toast('沒抓到數字');
-      const b = loadBatch();
-      b.items = b.items || [];
-      for (const n of nums){
-        b.items.push({ amount: n, note: '貼上', time: nowStr() });
-      }
-      saveBatch(b);
-      toast(`已貼上 ${nums.length} 筆`);
-      renderList();
-    }catch{
-      toast('無法讀取剪貼簿（可改用手動加入）');
-    }
-  });
-
-  $('#batch_clear').addEventListener('click', ()=>{
-    saveBatch({ items: [] , sumHKD: 0 });
-    toast('已清空');
-    renderBatch();
-  });
-
-  $('#batch_to_pay').addEventListener('click', ()=>{
-    const b = loadBatch();
-    const sum = (b.items||[]).reduce((a,x)=>a+(Number(x.amount)||0),0);
-    if (!sum) return toast('清單是空的');
-
-    b.sumHKD = sum;
-    b.injectId = uid();
-    saveBatch(b);
-
-    currentTab = 'pay';
-    toast('已帶入結帳（填入 HKD）');
-    render();
-  });
-
-  renderList();
+  return lastFx;
 }
 
-/* ===========================
-   Pay: HKD->RMB 結帳（我留自動進餘額）
-=========================== */
-function renderPay(){
-  const all = loadLedger();
-  const bal = calcBalance(all);
-  const batch = loadBatch();
-  const sumHKD = Number(batch.sumHKD || 0);
-
+function renderFx(){
   panelLeft.innerHTML = `
     <div class="hd">
       <div>
-        <div class="t">換匯結帳（HKD → RMB）</div>
-        <div class="s">RMB總額 = HKD × 匯率；結帳後「我留」會自動加進餘額，並永久記帳（按月檢索）。</div>
-      </div>
-      <div class="tag in">餘額：<span class="mono">${fmt(bal)}</span> RMB</div>
-    </div>
-    <div class="bd">
-      <div class="row">
-        <div>
-          <label for="pay_hkd">本次港幣總額 HKD</label>
-          <input id="pay_hkd" inputmode="decimal" placeholder="例如：1000" />
-        </div>
-        <div>
-          <label for="pay_rate">匯率（1 HKD = ? RMB）</label>
-          <input id="pay_rate" inputmode="decimal" placeholder="例如：0.92" />
-        </div>
-      </div>
-
-      <div class="row" style="margin-top:10px">
-        <div>
-          <label for="pay_pctOther">給對方比例（%）</label>
-          <input id="pay_pctOther" inputmode="decimal" value="85" />
-        </div>
-        <div>
-          <label for="pay_pctMe">我留比例（%）</label>
-          <input id="pay_pctMe" inputmode="decimal" value="15" />
-        </div>
-      </div>
-
-      <div style="margin-top:10px">
-        <label for="pay_note">備註（選填）</label>
-        <input id="pay_note" placeholder="例如：A客戶/某筆訂單" />
-      </div>
-
-      <div class="actions">
-        <button class="btn-primary" id="pay_save">計算＋存入結帳</button>
-        <button class="btn-ghost" id="pay_rate_link">查今日匯率</button>
-        <button class="btn-ghost" id="pay_copy_other">複製「給對方」</button>
-        <button class="btn-ghost" id="pay_copy_all">複製完整明細</button>
-        <button class="btn-danger" id="pay_clear">清空</button>
-      </div>
-
-      <div class="note">
-        ✅ 若你剛從「批次加總」帶入，HKD 會自動填入。<br/>
-        ✅ 結帳成功後，你可以選擇要不要清空批次清單（避免重複結帳）。
-      </div>
-    </div>
-  `;
-
-  panelRight.innerHTML = `
-    <div class="hd">
-      <div>
-        <div class="t">本次計算結果（預覽）</div>
-        <div class="s">你輸入就會算；按「存入結帳」才會寫入記帳與餘額。</div>
+        <div class="t">換匯（港幣加總 → 85% 全換 RMB 給對方）</div>
+        <div class="s">規則：只用「港幣加總的 85%」去換匯；換到的 RMB <b>全部給對方</b>；港幣 15% 直接扣除。</div>
       </div>
       <div class="tag">月份：<span class="mono">${currentMonth}</span></div>
     </div>
     <div class="bd">
+      <div class="row">
+        <div>
+          <label for="fx_hkd_total">1) 港幣加總金額（HKD）</label>
+          <input id="fx_hkd_total" inputmode="decimal" placeholder="例如：10000" />
+        </div>
+        <div>
+          <label for="fx_rate">3) 匯率（1 HKD = ? RMB）</label>
+          <input id="fx_rate" inputmode="decimal" placeholder="例如：0.92" />
+        </div>
+      </div>
+
+      <div style="margin-top:10px">
+        <label for="fx_note">備註（選填）</label>
+        <input id="fx_note" placeholder="例如：某客戶 / 這次結帳" />
+      </div>
+
+      <div class="actions">
+        <button class="btn-primary" id="fx_btn_calc">計算</button>
+        <button class="btn-ghost" id="fx_btn_copy">一鍵複製</button>
+        <button class="btn-ghost" id="fx_btn_save">存入記帳簿</button>
+        <button class="btn-ghost" id="fx_btn_rate">查匯率</button>
+        <button class="btn-danger" id="fx_btn_clear">清空</button>
+      </div>
+
+      <div class="note">
+        一鍵複製會輸出你指定 4 行：<br>
+        1) 港幣加總  2) 85%港幣  3) 匯率  4) 兌換RMB（給對方）
+      </div>
+
+      <div class="divider"></div>
+
       <div class="kpi">
         <div class="k">
-          <div class="lbl">兌換人民幣總額（RMB）</div>
-          <div class="val mono" id="pay_total">—</div>
-          <div class="sub mono" id="pay_formula">—</div>
+          <div class="lbl">1) 港幣加總（HKD）</div>
+          <div class="val mono" id="fx_k1">—</div>
+          <div class="sub">100%</div>
         </div>
         <div class="k">
-          <div class="lbl">給對方（RMB）</div>
-          <div class="val mono" id="pay_other">—</div>
-          <div class="sub">比例：<span class="mono" id="pay_other_pct">85%</span></div>
+          <div class="lbl">2) 85% 港幣（HKD）</div>
+          <div class="val mono" id="fx_k2">—</div>
+          <div class="sub">拿去換匯</div>
         </div>
         <div class="k">
-          <div class="lbl">我留（RMB）</div>
-          <div class="val mono" id="pay_me">—</div>
-          <div class="sub">比例：<span class="mono" id="pay_me_pct">15%</span></div>
+          <div class="lbl">3) 匯率（HKD→RMB）</div>
+          <div class="val mono" id="fx_k3">—</div>
+          <div class="sub">1 HKD = ? RMB</div>
         </div>
         <div class="k">
-          <div class="lbl">比例檢查</div>
-          <div class="val mono" id="pay_chk">—</div>
-          <div class="sub" id="pay_chk_hint">—</div>
+          <div class="lbl">4) 兌換RMB（給對方）</div>
+          <div class="val mono" id="fx_k4">—</div>
+          <div class="sub">全部給對方</div>
         </div>
       </div>
 
       <div class="divider"></div>
 
-      <div class="toolbar">
-        <div class="left">
-          <div style="font-weight:900">本月摘要</div>
-          <span class="tag">本月：<span class="mono">${currentMonth}</span></span>
-        </div>
-        <div class="right">
-          <button class="smallbtn" id="m_prev">◀ 上月</button>
-          <button class="smallbtn" id="m_next">下月 ▶</button>
-        </div>
-      </div>
-
-      <div class="note" id="pay_month_summary">—</div>
-
-      <div class="divider"></div>
-      <div style="font-weight:900;margin-bottom:6px">本月最近紀錄</div>
-      <ul class="list" id="pay_month_list"></ul>
+      <div style="font-weight:900;margin-bottom:6px">一鍵複製內容預覽</div>
+      <div class="note mono" id="fx_res">請輸入：港幣加總金額＋匯率</div>
     </div>
   `;
 
-  const hkdEl = $('#pay_hkd');
-  const rateEl = $('#pay_rate');
-  const pctOEl = $('#pay_pctOther');
-  const pctMEl = $('#pay_pctMe');
+  panelRight.innerHTML = `
+    <div class="hd">
+      <div>
+        <div class="t">本月統計（按月檢索）</div>
+        <div class="s">⑤ 每月總換匯 RMB（給對方）＋⑥ 每月總收入港幣（含換匯收款HKD＋手動收入HKD）。</div>
+      </div>
+      <div class="tag">本月：<span class="mono">${currentMonth}</span></div>
+    </div>
+    <div class="bd">
+      <div class="toolbar">
+        <div class="left">
+          <button class="smallbtn" id="m_prev">◀ 上月</button>
+          <button class="smallbtn" id="m_next">下月 ▶</button>
+        </div>
+        <div class="right">
+          <button class="smallbtn" id="goto_ledger">去記帳簿</button>
+        </div>
+      </div>
 
-  if (!hkdEl.value && sumHKD > 0) hkdEl.value = String(sumHKD);
+      <div class="divider"></div>
 
-  function calcPreview(){
-    const hkd = toNum(hkdEl.value);
-    const rate = toNum(rateEl.value);
-    let pctO = toNum(pctOEl.value);
-    let pctM = toNum(pctMEl.value);
-    if (!Number.isFinite(pctO)) pctO = 85;
-    if (!Number.isFinite(pctM)) pctM = 15;
+      <div class="kpi" id="fx_month_kpi"></div>
 
-    $('#pay_other_pct').textContent = `${pctO}%`;
-    $('#pay_me_pct').textContent = `${pctM}%`;
+      <div class="divider"></div>
+      <div style="font-weight:900;margin-bottom:6px">本月最近 10 筆（換匯）</div>
+      <ul class="list" id="fx_month_list"></ul>
+    </div>
+  `;
 
-    if (!Number.isFinite(hkd) || !Number.isFinite(rate) || hkd < 0 || rate < 0){
-      $('#pay_total').textContent = '—';
-      $('#pay_other').textContent = '—';
-      $('#pay_me').textContent = '—';
-      $('#pay_formula').textContent = '請輸入 HKD 與匯率';
-      $('#pay_chk').textContent = '—';
-      $('#pay_chk_hint').textContent = '—';
-      return null;
-    }
+  function renderMonth(){
+    const all = loadLedger();
+    const sum = monthSummary(all, currentMonth);
 
-    const total = hkd * rate;
-    const other = total * (pctO/100);
-    const me = total * (pctM/100);
-    const sumPct = pctO + pctM;
+    $('#fx_month_kpi').innerHTML = `
+      <div class="k">
+        <div class="lbl">⑤ 每月總換匯（RMB 給對方）</div>
+        <div class="val mono">${fmt(sum.sumFxRmb)}</div>
+        <div class="sub">本月換匯筆數：${sum.fxCount}</div>
+      </div>
+      <div class="k">
+        <div class="lbl">⑥ 每月總收入港幣（HKD）</div>
+        <div class="val mono">${fmt(sum.sumIncomeHKD)}</div>
+        <div class="sub">含：換匯收款HKD + 手動收入HKD</div>
+      </div>
+      <div class="k">
+        <div class="lbl">換匯收款HKD（本月）</div>
+        <div class="val mono">${fmt(sum.sumFxHKDTotal)}</div>
+        <div class="sub">結帳時的港幣加總</div>
+      </div>
+      <div class="k">
+        <div class="lbl">手動收入HKD（本月）</div>
+        <div class="val mono">${fmt(sum.sumManualIncomeHKD)}</div>
+        <div class="sub">來自記帳簿「收入 HKD」</div>
+      </div>
+    `;
 
-    $('#pay_total').textContent = fmt(total);
-    $('#pay_other').textContent = fmt(other);
-    $('#pay_me').textContent = fmt(me);
-    $('#pay_formula').textContent = `HKD ${fmt(hkd)} × rate ${fmt(rate,4)} = RMB ${fmt(total)}`;
-
-    $('#pay_chk').textContent = fmt(sumPct,2) + '%';
-    if (Math.abs(sumPct - 100) > 0.0001){
-      $('#pay_chk_hint').textContent = '加總不是 100%，仍可存，但建議調整';
-      $('#pay_chk_hint').style.color = '#b42318';
-    }else{
-      $('#pay_chk_hint').textContent = '加總 100%（正常）';
-      $('#pay_chk_hint').style.color = '#66746c';
-    }
-
-    return {hkd, rate, pctO, pctM, total, other, me};
-  }
-
-  function renderMonthBlock(){
-    const all2 = loadLedger();
-    const sum = monthSummary(all2, currentMonth);
-    const bal2 = calcBalance(all2);
-
-    $('#pay_month_summary').innerHTML =
-      `本月筆數：<b class="mono">${sum.count}</b><br>` +
-      `HKD→RMB｜HKD 合計：<b class="mono">${fmt(sum.sumHKD)}</b>｜RMB 總額：<b class="mono">${fmt(sum.sumRmb)}</b>｜對方：<b class="mono">${fmt(sum.sumOther)}</b>｜我留：<b class="mono">${fmt(sum.sumMe)}</b><br>` +
-      `餘額調整｜存入：<b class="mono">${fmt(sum.sumIn)}</b>｜領出：<b class="mono">${fmt(sum.sumOut)}</b><br>` +
-      `RMB→TWD｜用 RMB：<b class="mono">${fmt(sum.sumRmbToTwdRmb)}</b>｜換得 TWD：<b class="mono">${fmt(sum.sumRmbToTwdTwd)}</b><br>` +
-      `目前累積餘額（全期間）：<b class="mono">${fmt(bal2)}</b> RMB`;
-
-    const listEl = $('#pay_month_list');
-    const items = all2
-      .filter(x=>x.month===currentMonth)
+    const listEl = $('#fx_month_list');
+    const items = all
+      .filter(x => x.month === currentMonth && x.type === 'exchange85')
       .slice()
-      .sort((a,b)=>(b.ts||'').localeCompare(a.ts||''));
+      .sort((a,b)=>(b.ts||'').localeCompare(a.ts||''))
+      .slice(0,10);
 
     if (!items.length){
-      listEl.innerHTML = `<li class="item muted">本月尚無紀錄</li>`;
+      listEl.innerHTML = `<li class="item muted">本月尚無換匯紀錄</li>`;
       return;
     }
+
     listEl.innerHTML = '';
     for (const it of items){
       const li = document.createElement('li');
       li.className = 'item';
-
-      if (it.type === 'exchange'){
-        li.innerHTML = `
-          <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
-            <div>
-              <div class="mono"><span class="tag in">結帳</span> HKD ${fmt(it.hkd)} × rate ${fmt(it.rate,4)} = RMB ${fmt(it.totalRmb)}</div>
-              <div class="mono muted" style="margin-top:4px">對方 ${fmt(it.otherRmb)}（${it.pctOther}%）｜我留 ${fmt(it.meRmb)}（${it.pctMe}%）</div>
-              ${it.note ? `<div class="muted" style="margin-top:4px">備註：${escapeHtml(it.note)}</div>` : ``}
-              <div class="muted" style="margin-top:4px">
-                ${fmtTime(it.ts)} ・ <a href="${it.rateUrl||RATE_URL}" target="_blank" rel="noreferrer">🔗 匯率來源</a>
-              </div>
-            </div>
-            <div style="white-space:nowrap">
-              <button class="smallbtn" data-del="${it.id}">刪除</button>
-            </div>
+      li.innerHTML = `
+        <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+          <div>
+            <div class="mono"><b>HKD</b> ${fmt(it.hkdTotal)} → 85% <b>HKD</b> ${fmt(it.hkd85)} × rate ${fmt(it.rate,4)} = <b>RMB</b> ${fmt(it.rmbGiven)}</div>
+            ${it.note ? `<div class="muted" style="margin-top:4px">備註：${escapeHtml(it.note)}</div>` : ``}
+            <div class="muted" style="margin-top:4px">${fmtTime(it.ts)} ・ <a href="${it.rateUrl||RATE_HKDCNY}" target="_blank" rel="noreferrer">🔗 匯率連結</a></div>
           </div>
-        `;
-      } else if (it.type === 'balance_in') {
-        li.innerHTML = `
-          <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
-            <div>
-              <div class="mono"><span class="tag in">存入</span> RMB +${fmt(it.amountRmb)}</div>
-              ${it.note ? `<div class="muted" style="margin-top:4px">備註：${escapeHtml(it.note)}</div>` : ``}
-              <div class="muted" style="margin-top:4px">${fmtTime(it.ts)}</div>
-            </div>
-            <div style="white-space:nowrap">
-              <button class="smallbtn" data-del="${it.id}">刪除</button>
-            </div>
+          <div style="white-space:nowrap">
+            <button class="smallbtn" data-del="${it.id}">刪除</button>
           </div>
-        `;
-      } else if (it.type === 'balance_out') {
-        li.innerHTML = `
-          <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
-            <div>
-              <div class="mono"><span class="tag out">領出</span> RMB -${fmt(it.amountRmb)}</div>
-              ${it.note ? `<div class="muted" style="margin-top:4px">備註：${escapeHtml(it.note)}</div>` : ``}
-              <div class="muted" style="margin-top:4px">${fmtTime(it.ts)}</div>
-            </div>
-            <div style="white-space:nowrap">
-              <button class="smallbtn" data-del="${it.id}">刪除</button>
-            </div>
-          </div>
-        `;
-      } else {
-        // rmb_to_twd
-        li.innerHTML = `
-          <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
-            <div>
-              <div class="mono"><span class="tag fx">RMB→TWD</span> 用 RMB ${fmt(it.rmb)} × rate ${fmt(it.rate,4)} = TWD ${fmt(it.twd)}</div>
-              ${it.note ? `<div class="muted" style="margin-top:4px">備註：${escapeHtml(it.note)}</div>` : ``}
-              <div class="muted" style="margin-top:4px">${fmtTime(it.ts)}</div>
-            </div>
-            <div style="white-space:nowrap">
-              <button class="smallbtn" data-del="${it.id}">刪除</button>
-            </div>
-          </div>
-        `;
-      }
-
+        </div>
+      `;
       listEl.appendChild(li);
     }
 
     listEl.querySelectorAll('[data-del]').forEach(btn=>{
       btn.addEventListener('click', ()=>{
         const id = btn.getAttribute('data-del');
-        if (!id) return;
         const kept = loadLedger().filter(x=>x.id!==id);
         saveLedger(kept);
         toast('已刪除');
-        renderPay();
+        renderFx();
       });
     });
   }
 
-  ['input','change'].forEach(evt=>{
-    hkdEl.addEventListener(evt, calcPreview);
-    rateEl.addEventListener(evt, calcPreview);
-    pctOEl.addEventListener(evt, calcPreview);
-    pctMEl.addEventListener(evt, calcPreview);
+  $('#m_prev').addEventListener('click', ()=>{ currentMonth = shiftMonth(currentMonth,-1); renderFx(); });
+  $('#m_next').addEventListener('click', ()=>{ currentMonth = shiftMonth(currentMonth,+1); renderFx(); });
+  $('#goto_ledger').addEventListener('click', ()=>{ tab='ledger'; render(); });
+
+  $('#fx_btn_calc').addEventListener('click', ()=>{
+    const res = fxCalcPreview();
+    if (!res) return toast('請輸入港幣與匯率');
+    toast('已計算');
   });
 
-  $('#pay_rate_link').addEventListener('click', ()=> window.open(RATE_URL,'_blank'));
+  ['input','change'].forEach(evt=>{
+    $('#fx_hkd_total').addEventListener(evt, fxCalcPreview);
+    $('#fx_rate').addEventListener(evt, fxCalcPreview);
+  });
 
-  $('#pay_clear').addEventListener('click', ()=>{
-    hkdEl.value='';
-    rateEl.value='';
-    pctOEl.value='85';
-    pctMEl.value='15';
-    $('#pay_note').value='';
-    calcPreview();
+  $('#fx_btn_copy').addEventListener('click', async ()=>{
+    fxCalcPreview();
+    if (!lastFxCopyText) return toast('先計算');
+    await copyText(lastFxCopyText);
+  });
+
+  $('#fx_btn_rate').addEventListener('click', ()=> window.open(RATE_HKDCNY,'_blank'));
+
+  $('#fx_btn_clear').addEventListener('click', ()=>{
+    $('#fx_hkd_total').value = '';
+    $('#fx_rate').value = '';
+    $('#fx_note').value = '';
+    lastFx = null; lastFxCopyText='';
+    fxCalcPreview();
     toast('已清空');
   });
 
-  $('#pay_copy_other').addEventListener('click', async ()=>{
-    const res = calcPreview();
-    if (!res) return toast('先輸入資料');
-    await copyText(`給你人民幣：${fmt(res.other)}（總額 ${fmt(res.total)} × ${res.pctO}%）`);
-  });
+  $('#fx_btn_save').addEventListener('click', ()=>{
+    const res = fxCalcPreview();
+    if (!res) return toast('先輸入並計算');
 
-  $('#pay_copy_all').addEventListener('click', async ()=>{
-    const res = calcPreview();
-    if (!res) return toast('先輸入資料');
-    const note = ($('#pay_note').value || '').trim();
-    const text =
-`兌換明細（HKD→RMB）
-HKD：${fmt(res.hkd)}
-匯率：1 HKD = ${fmt(res.rate,4)} RMB
-RMB 總額：${fmt(res.total)}
-給對方（${res.pctO}%）：${fmt(res.other)}
-我留（${res.pctM}%）：${fmt(res.me)}
-時間：${nowStr()}
-匯率來源：${RATE_URL}${note ? `\n備註：${note}` : ''}`;
-    await copyText(text);
-  });
+    const note = ($('#fx_note').value || '').trim();
 
-  $('#pay_save').addEventListener('click', ()=>{
-    const res = calcPreview();
-    if (!res) return toast('先輸入 HKD 與匯率');
-
-    const note = ($('#pay_note').value || '').trim();
     const item = {
       id: uid(),
-      type: 'exchange',
+      type: 'exchange85',
       ts: nowISO(),
       month: currentMonth,
-      hkd: res.hkd,
+      hkdTotal: res.hkdTotal,
+      hkd85: res.hkd85,
       rate: res.rate,
-      pctOther: res.pctO,
-      pctMe: res.pctM,
-      totalRmb: res.total,
-      otherRmb: res.other,
-      meRmb: res.me,
+      rmbGiven: res.rmbGiven,
       note,
-      rateUrl: RATE_URL
+      rateUrl: RATE_HKDCNY
     };
 
-    const all2 = loadLedger();
-    all2.push(item);
-    all2.sort((a,b)=>(a.ts||'').localeCompare(b.ts||''));
-    saveLedger(all2);
+    const all = loadLedger();
+    all.push(item);
+    all.sort((a,b)=>(a.ts||'').localeCompare(b.ts||''));
+    saveLedger(all);
 
-    toast('已存入結帳（我留已進餘額）');
-
-    const b = loadBatch();
-    if ((b.items||[]).length){
-      const ok = confirm('要清空「批次加總清單」嗎？\n（避免下次重複結帳）');
-      if (ok) saveBatch({ items: [] , sumHKD: 0 });
-    }
-
-    renderPay();
+    toast('已存入記帳簿');
+    renderFx();
   });
 
-  $('#m_prev').addEventListener('click', ()=>{ currentMonth = shiftMonth(currentMonth,-1); renderPay(); });
-  $('#m_next').addEventListener('click', ()=>{ currentMonth = shiftMonth(currentMonth,+1); renderPay(); });
-
-  calcPreview();
-  renderMonthBlock();
+  fxCalcPreview();
+  renderMonth();
 }
 
 /* ===========================
-   Ledger: 按月檢索 + 餘額存入/領出 + RMB→TWD 記錄 + 備份
+   Ledger page (monthly + backup)
 =========================== */
 function renderLedger(){
   const all = loadLedger();
-  const bal = calcBalance(all);
   const sum = monthSummary(all, currentMonth);
 
   panelLeft.innerHTML = `
     <div class="hd">
       <div>
-        <div class="t">記帳與餘額（按月檢索）</div>
-        <div class="s">結帳（我留）自動進餘額；可手動存入/領出；新增：RMB→TWD 換匯記錄（會扣餘額）；可匯出/匯入備份。</div>
+        <div class="t">記帳簿（永久保存｜按月檢索｜手動增刪｜備註）</div>
+        <div class="s">新增：可匯出/匯入備份（JSON），換手機也不怕資料不見。</div>
       </div>
-      <div class="tag in">目前餘額：<span class="mono">${fmt(bal)}</span> RMB</div>
+      <div class="tag">月份：<span class="mono">${currentMonth}</span></div>
     </div>
     <div class="bd">
       <div class="toolbar">
         <div class="left">
-          <div style="font-weight:900">選擇月份</div>
           <input id="ledger_month" type="month" value="${currentMonth}" style="max-width:180px" />
           <button class="smallbtn" id="ledger_prev">◀</button>
           <button class="smallbtn" id="ledger_next">▶</button>
         </div>
         <div class="right">
-          <button class="smallbtn" id="export_btn">匯出備份</button>
-          <button class="smallbtn" id="import_btn">匯入備份</button>
-          <button class="smallbtn" id="clear_month_btn">清空本月</button>
+          <button class="smallbtn" id="backup_export">匯出備份</button>
+          <button class="smallbtn" id="backup_import">匯入備份</button>
+          <input id="backup_file" type="file" accept="application/json" style="display:none" />
+          <button class="smallbtn" id="open_hkdcny">HKD→CNY</button>
+          <button class="smallbtn" id="open_cnytwd">CNY→TWD</button>
         </div>
+      </div>
+
+      <div class="note">
+        備份規則：匯入時會「合併」資料（同 ID 不重複），不會把你原本的記帳覆蓋掉。
       </div>
 
       <div class="divider"></div>
 
       <div class="kpi">
         <div class="k">
-          <div class="lbl">本月 HKD 合計（結帳）</div>
-          <div class="val mono">${fmt(sum.sumHKD)}</div>
-          <div class="sub">HKD→RMB</div>
+          <div class="lbl">⑤ 本月總換匯 RMB（給對方）</div>
+          <div class="val mono">${fmt(sum.sumFxRmb)}</div>
+          <div class="sub">換匯筆數：${sum.fxCount}</div>
         </div>
         <div class="k">
-          <div class="lbl">本月 我留（自動進餘額）</div>
-          <div class="val mono">${fmt(sum.sumMe)}</div>
-          <div class="sub">HKD→RMB</div>
-        </div>
-        <div class="k">
-          <div class="lbl">本月 RMB→TWD（用 RMB）</div>
-          <div class="val mono">${fmt(sum.sumRmbToTwdRmb)}</div>
-          <div class="sub">會扣餘額</div>
-        </div>
-        <div class="k">
-          <div class="lbl">本月 RMB→TWD（換得 TWD）</div>
-          <div class="val mono">${fmt(sum.sumRmbToTwdTwd)}</div>
-          <div class="sub">記錄用途</div>
+          <div class="lbl">⑥ 本月總收入 HKD</div>
+          <div class="val mono">${fmt(sum.sumIncomeHKD)}</div>
+          <div class="sub">換匯收款HKD + 手動收入HKD</div>
         </div>
       </div>
 
       <div class="divider"></div>
 
-      <div style="font-weight:900;margin-bottom:6px">餘額調整（RMB 存入/領出）</div>
+      <div class="t" style="margin:0 0 6px">A) 手動新增一筆（可選幣別）</div>
       <div class="row">
         <div>
-          <label for="adj_type">類型</label>
-          <select id="adj_type">
-            <option value="balance_in">存入（+）</option>
-            <option value="balance_out">領出（-）</option>
+          <label for="add_type">類型</label>
+          <select id="add_type">
+            <option value="income">收入</option>
+            <option value="expense">支出</option>
+            <option value="adjust">調整</option>
           </select>
         </div>
         <div>
-          <label for="adj_amount">金額（RMB）</label>
-          <input id="adj_amount" inputmode="decimal" placeholder="例如：200" />
+          <label for="add_currency">幣別</label>
+          <select id="add_currency">
+            <option value="HKD">HKD</option>
+            <option value="RMB">RMB</option>
+            <option value="TWD">TWD</option>
+          </select>
         </div>
       </div>
-      <div style="margin-top:10px">
-        <label for="adj_note">備註（選填）</label>
-        <input id="adj_note" placeholder="例如：現金存入/領出/轉帳" />
+      <div class="row" style="margin-top:10px">
+        <div>
+          <label for="add_amount">金額</label>
+          <input id="add_amount" inputmode="decimal" placeholder="例如：3000" />
+        </div>
+        <div>
+          <label for="add_note">備註（選填）</label>
+          <input id="add_note" placeholder="例如：某筆收入/某筆支出" />
+        </div>
       </div>
-
       <div class="actions">
-        <button class="btn-primary" id="adj_save">存入記錄</button>
-        <button class="btn-ghost" id="copy_balance">複製目前餘額</button>
+        <button class="btn-primary" id="add_save">新增到本月</button>
+        <button class="btn-danger" id="add_clear">清空欄位</button>
       </div>
 
       <div class="divider"></div>
 
-      <div style="font-weight:900;margin-bottom:6px">RMB → TWD 換匯記錄（會扣餘額）</div>
+      <div class="t" style="margin:0 0 6px">B) RMB→TWD 換匯記錄（手動匯率＋備註）</div>
       <div class="row">
         <div>
-          <label for="rt_rmb">使用人民幣（RMB）</label>
+          <label for="rt_rmb">使用 RMB</label>
           <input id="rt_rmb" inputmode="decimal" placeholder="例如：1000" />
         </div>
         <div>
-          <label for="rt_rate">匯率（1 RMB = ? TWD）</label>
+          <label for="rt_rate">匯率（1 CNY/RMB = ? TWD）</label>
           <input id="rt_rate" inputmode="decimal" placeholder="例如：4.35" />
         </div>
       </div>
       <div style="margin-top:10px">
         <label for="rt_note">備註（選填）</label>
-        <input id="rt_note" placeholder="例如：換現金/轉帳用途/誰的款" />
+        <input id="rt_note" placeholder="例如：換台幣用途/給誰/哪筆" />
       </div>
-
       <div class="actions">
-        <button class="btn-warn" id="rt_preview">先算一下</button>
+        <button class="btn-ghost" id="rt_preview">先算一下</button>
         <button class="btn-primary" id="rt_save">存入 RMB→TWD 記錄</button>
         <button class="btn-ghost" id="rt_copy">複製本次明細</button>
       </div>
-
-      <div class="note" id="rt_note_box">
-        ✅ 這筆會「扣掉你的 RMB 餘額」。<br/>
-        ✅ TWD 是記錄用（方便你回頭對帳），匯率你手動輸入即可。
-      </div>
+      <div class="note mono" id="rt_box">輸入 RMB 與匯率後可先算一下。匯率查詢請點 CNY→TWD 連結。</div>
     </div>
   `;
 
   panelRight.innerHTML = `
     <div class="hd">
       <div>
-        <div class="t">本月明細</div>
-        <div class="s">可刪除單筆（會自動重算餘額）。</div>
+        <div class="t">本月明細（可刪除）</div>
+        <div class="s">換匯 / 手動收入支出 / RMB→TWD 都會列在這裡。</div>
       </div>
-      <div class="tag">月份：<span class="mono">${currentMonth}</span></div>
+      <div class="tag">本月：<span class="mono">${currentMonth}</span></div>
     </div>
     <div class="bd">
       <ul class="list" id="ledger_list"></ul>
     </div>
   `;
 
-  const listEl = $('#ledger_list');
-
   function renderList(){
-    const arr = loadLedger().filter(x=>x.month===currentMonth)
-      .slice().sort((a,b)=>(b.ts||'').localeCompare(a.ts||''));
+    const arr = loadLedger()
+      .filter(x=>x.month===currentMonth)
+      .slice()
+      .sort((a,b)=>(b.ts||'').localeCompare(a.ts||''));
 
+    const listEl = $('#ledger_list');
     if (!arr.length){
       listEl.innerHTML = `<li class="item muted">本月尚無紀錄</li>`;
       return;
     }
+
     listEl.innerHTML = '';
     for (const it of arr){
       const li = document.createElement('li');
       li.className = 'item';
 
-      if (it.type === 'exchange'){
+      if (it.type === 'exchange85'){
         li.innerHTML = `
           <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
             <div>
-              <div class="mono"><span class="tag in">結帳</span> HKD ${fmt(it.hkd)} × rate ${fmt(it.rate,4)} = RMB ${fmt(it.totalRmb)}</div>
-              <div class="mono muted" style="margin-top:4px">對方 ${fmt(it.otherRmb)}（${it.pctOther}%）｜我留 ${fmt(it.meRmb)}（${it.pctMe}%）</div>
+              <div class="mono"><b>換匯</b> HKD ${fmt(it.hkdTotal)} → 85% HKD ${fmt(it.hkd85)} × ${fmt(it.rate,4)} = RMB ${fmt(it.rmbGiven)}（給對方）</div>
               ${it.note ? `<div class="muted" style="margin-top:4px">備註：${escapeHtml(it.note)}</div>` : ``}
-              <div class="muted" style="margin-top:4px">${fmtTime(it.ts)} ・ <a href="${it.rateUrl||RATE_URL}" target="_blank" rel="noreferrer">🔗 匯率來源</a></div>
+              <div class="muted" style="margin-top:4px">${fmtTime(it.ts)} ・ <a href="${it.rateUrl||RATE_HKDCNY}" target="_blank" rel="noreferrer">🔗 匯率連結</a></div>
             </div>
             <div style="white-space:nowrap">
               <button class="smallbtn" data-del="${it.id}">刪除</button>
             </div>
           </div>
         `;
-      } else if (it.type === 'balance_in') {
+      } else if (it.type === 'rmb_to_twd'){
         li.innerHTML = `
           <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
             <div>
-              <div class="mono"><span class="tag in">存入</span> RMB +${fmt(it.amountRmb)}</div>
+              <div class="mono"><b>RMB→TWD</b> RMB ${fmt(it.rmb)} × ${fmt(it.rate,4)} = TWD ${fmt(it.twd)}</div>
               ${it.note ? `<div class="muted" style="margin-top:4px">備註：${escapeHtml(it.note)}</div>` : ``}
-              <div class="muted" style="margin-top:4px">${fmtTime(it.ts)}</div>
-            </div>
-            <div style="white-space:nowrap">
-              <button class="smallbtn" data-del="${it.id}">刪除</button>
-            </div>
-          </div>
-        `;
-      } else if (it.type === 'balance_out') {
-        li.innerHTML = `
-          <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
-            <div>
-              <div class="mono"><span class="tag out">領出</span> RMB -${fmt(it.amountRmb)}</div>
-              ${it.note ? `<div class="muted" style="margin-top:4px">備註：${escapeHtml(it.note)}</div>` : ``}
-              <div class="muted" style="margin-top:4px">${fmtTime(it.ts)}</div>
+              <div class="muted" style="margin-top:4px">${fmtTime(it.ts)} ・ <a href="${RATE_CNYTWD}" target="_blank" rel="noreferrer">🔗 CNY→TWD</a></div>
             </div>
             <div style="white-space:nowrap">
               <button class="smallbtn" data-del="${it.id}">刪除</button>
@@ -1157,11 +928,11 @@ function renderLedger(){
           </div>
         `;
       } else {
-        // rmb_to_twd
+        const label = it.type === 'income' ? '收入' : it.type === 'expense' ? '支出' : '調整';
         li.innerHTML = `
           <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
             <div>
-              <div class="mono"><span class="tag fx">RMB→TWD</span> 用 RMB ${fmt(it.rmb)} × rate ${fmt(it.rate,4)} = TWD ${fmt(it.twd)}</div>
+              <div class="mono"><b>${label}</b> ${it.currency} ${fmt(Number(it.amount)||0)}</div>
               ${it.note ? `<div class="muted" style="margin-top:4px">備註：${escapeHtml(it.note)}</div>` : ``}
               <div class="muted" style="margin-top:4px">${fmtTime(it.ts)}</div>
             </div>
@@ -1178,7 +949,6 @@ function renderLedger(){
     listEl.querySelectorAll('[data-del]').forEach(btn=>{
       btn.addEventListener('click', ()=>{
         const id = btn.getAttribute('data-del');
-        if (!id) return;
         const kept = loadLedger().filter(x=>x.id!==id);
         saveLedger(kept);
         toast('已刪除');
@@ -1196,20 +966,40 @@ function renderLedger(){
   $('#ledger_prev').addEventListener('click', ()=>{ currentMonth = shiftMonth(currentMonth,-1); renderLedger(); });
   $('#ledger_next').addEventListener('click', ()=>{ currentMonth = shiftMonth(currentMonth,+1); renderLedger(); });
 
-  // balance adjust save
-  $('#adj_save').addEventListener('click', ()=>{
-    const type = $('#adj_type').value;
-    const amt = toNum($('#adj_amount').value);
-    if (!Number.isFinite(amt) || amt <= 0) return toast('請輸入金額');
-    const note = ($('#adj_note').value || '').trim();
+  // open links
+  $('#open_hkdcny').addEventListener('click', ()=> window.open(RATE_HKDCNY,'_blank'));
+  $('#open_cnytwd').addEventListener('click', ()=> window.open(RATE_CNYTWD,'_blank'));
+
+  // backup export/import
+  $('#backup_export').addEventListener('click', exportBackup);
+  $('#backup_import').addEventListener('click', ()=> $('#backup_file').click());
+  $('#backup_file').addEventListener('change', async (e)=>{
+    const file = e.target.files && e.target.files[0];
+    e.target.value = ''; // allow reselect same file next time
+    if (!file) return;
+    const res = await importBackupFromFile(file);
+    if (!res.ok) return toast(res.msg);
+    toast(res.msg);
+    renderLedger();
+  });
+
+  // manual add
+  $('#add_save').addEventListener('click', ()=>{
+    const type = $('#add_type').value;
+    const currency = $('#add_currency').value;
+    const amount = toNum($('#add_amount').value);
+    const note = ($('#add_note').value||'').trim();
+
+    if (!Number.isFinite(amount) || amount <= 0) return toast('請輸入金額');
 
     const item = {
       id: uid(),
       type,
+      currency,
+      amount,
+      note,
       ts: nowISO(),
-      month: currentMonth,
-      amountRmb: amt,
-      note
+      month: currentMonth
     };
 
     const all2 = loadLedger();
@@ -1217,24 +1007,24 @@ function renderLedger(){
     all2.sort((a,b)=>(a.ts||'').localeCompare(b.ts||''));
     saveLedger(all2);
 
-    $('#adj_amount').value = '';
-    $('#adj_note').value = '';
-    toast(type === 'balance_in' ? '已存入（餘額增加）' : '已領出（餘額扣除）');
+    toast('已新增');
+    $('#add_amount').value='';
+    $('#add_note').value='';
     renderLedger();
   });
 
-  $('#copy_balance').addEventListener('click', async ()=>{
-    const all2 = loadLedger();
-    const bal2 = calcBalance(all2);
-    await copyText(`目前餘額：${fmt(bal2)} RMB`);
+  $('#add_clear').addEventListener('click', ()=>{
+    $('#add_amount').value='';
+    $('#add_note').value='';
+    toast('已清空欄位');
   });
 
-  // RMB->TWD preview/save/copy
+  // RMB->TWD tool
   function calcRmbToTwd(){
     const rmb = toNum($('#rt_rmb').value);
-    const rate = toNum($('#rt_rate').value); // 1 RMB = ? TWD
-    if (!Number.isFinite(rmb) || rmb <= 0) return null;
-    if (!Number.isFinite(rate) || rate <= 0) return null;
+    const rate = toNum($('#rt_rate').value);
+    if (!Number.isFinite(rmb) || rmb<=0) return null;
+    if (!Number.isFinite(rate) || rate<=0) return null;
     const twd = rmb * rate;
     return { rmb, rate, twd };
   }
@@ -1242,20 +1032,18 @@ function renderLedger(){
   $('#rt_preview').addEventListener('click', ()=>{
     const res = calcRmbToTwd();
     if (!res) return toast('請輸入 RMB 與匯率');
-    $('#rt_note_box').innerHTML =
-      `本次預估：用 <b class="mono">RMB ${fmt(res.rmb)}</b> × rate <b class="mono">${fmt(res.rate,4)}</b> = <b class="mono">TWD ${fmt(res.twd)}</b><br>` +
-      `✅ 這筆存入後會扣你的 RMB 餘額。`;
+    $('#rt_box').textContent = `本次：RMB ${fmt(res.rmb)} × ${fmt(res.rate,4)} = TWD ${fmt(res.twd)}`;
     toast('已計算');
   });
 
   $('#rt_copy').addEventListener('click', async ()=>{
     const res = calcRmbToTwd();
     if (!res) return toast('請輸入 RMB 與匯率');
-    const note = ($('#rt_note').value || '').trim();
+    const note = ($('#rt_note').value||'').trim();
     const text =
 `換匯記錄（RMB→TWD）
 使用 RMB：${fmt(res.rmb)}
-匯率：1 RMB = ${fmt(res.rate,4)} TWD
+匯率：1 CNY/RMB = ${fmt(res.rate,4)} TWD
 換得 TWD：${fmt(res.twd)}
 時間：${nowStr()}${note ? `\n備註：${note}` : ''}`;
     await copyText(text);
@@ -1264,7 +1052,7 @@ function renderLedger(){
   $('#rt_save').addEventListener('click', ()=>{
     const res = calcRmbToTwd();
     if (!res) return toast('請輸入 RMB 與匯率');
-    const note = ($('#rt_note').value || '').trim();
+    const note = ($('#rt_note').value||'').trim();
 
     const item = {
       id: uid(),
@@ -1282,51 +1070,12 @@ function renderLedger(){
     all2.sort((a,b)=>(a.ts||'').localeCompare(b.ts||''));
     saveLedger(all2);
 
-    $('#rt_rmb').value = '';
-    $('#rt_rate').value = '';
-    $('#rt_note').value = '';
-    $('#rt_note_box').innerHTML =
-      `✅ 這筆會「扣掉你的 RMB 餘額」。<br/>✅ TWD 是記錄用（方便你回頭對帳），匯率你手動輸入即可。`;
+    $('#rt_rmb').value='';
+    $('#rt_rate').value='';
+    $('#rt_note').value='';
+    $('#rt_box').textContent = '已存入 RMB→TWD 記錄。';
 
-    toast('已存入 RMB→TWD 記錄（已扣餘額）');
-    renderLedger();
-  });
-
-  // export/import backup (JSON -> clipboard)
-  $('#export_btn').addEventListener('click', async ()=>{
-    const payload = {
-      app: 'change-pay-hr',
-      version: 21,
-      exportedAt: nowISO(),
-      ledger: loadLedger(),
-      batch: loadBatch()
-    };
-    await copyText(JSON.stringify(payload));
-    toast('已匯出到剪貼簿（JSON）');
-  });
-
-  $('#import_btn').addEventListener('click', async ()=>{
-    try{
-      const text = await navigator.clipboard.readText();
-      if (!text) return toast('剪貼簿沒有內容');
-      const obj = JSON.parse(text);
-      if (!obj || typeof obj !== 'object') return toast('格式不對');
-      if (!Array.isArray(obj.ledger)) return toast('找不到 ledger');
-      saveLedger(obj.ledger);
-      if (obj.batch && typeof obj.batch === 'object') saveBatch(obj.batch);
-      toast('已匯入完成');
-      renderLedger();
-    }catch{
-      toast('匯入失敗（請確認剪貼簿是 JSON）');
-    }
-  });
-
-  $('#clear_month_btn').addEventListener('click', ()=>{
-    const ok = confirm(`確定要清空 ${currentMonth} 的全部紀錄嗎？\n（只會刪除該月，不影響其他月份）`);
-    if (!ok) return;
-    const kept = loadLedger().filter(x=>x.month!==currentMonth);
-    saveLedger(kept);
-    toast('已清空本月');
+    toast('已存入 RMB→TWD');
     renderLedger();
   });
 
@@ -1334,20 +1083,17 @@ function renderLedger(){
 }
 
 /* ===========================
-   Network pill
+   Boot
 =========================== */
 function updateNetPill(){
   const el = $('#netStatus');
-  const on = navigator.onLine;
-  el.textContent = on ? '目前狀態：在線' : '目前狀態：離線（仍可用）';
+  el.textContent = navigator.onLine ? '目前狀態：在線' : '目前狀態：離線（仍可用）';
 }
 window.addEventListener('online', updateNetPill);
 window.addEventListener('offline', updateNetPill);
 
-/* ===========================
-   Boot
-=========================== */
 render();
+updateNetPill();
 </script>
 </body>
 </html>
