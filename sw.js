@@ -1,7 +1,7 @@
-/* sw.js — change-pay-hr (GitHub Pages) */
+/* sw.js — fx85 (GitHub Pages) */
 
-const VERSION = "v2.1.0-2026-01-07"; // ← 你每次改版只要改這行，就能強制更新
-const CACHE_NAME = `change-pay-hr-${VERSION}`;
+const VERSION = "v3.1.0-2026-01-08"; // 有改動就改這行，強制更新快取
+const CACHE_NAME = `fx85-${VERSION}`;
 
 const PRECACHE_URLS = [
   "./",
@@ -24,7 +24,7 @@ self.addEventListener("activate", (event) => {
       const keys = await caches.keys();
       await Promise.all(
         keys
-          .filter((k) => k.startsWith("change-pay-hr-") && k !== CACHE_NAME)
+          .filter((k) => k.startsWith("fx85-") && k !== CACHE_NAME)
           .map((k) => caches.delete(k))
       );
       await self.clients.claim();
@@ -38,7 +38,7 @@ self.addEventListener("fetch", (event) => {
 
   if (url.origin !== self.location.origin) return;
 
-  // 導航：network-first，避免更新卡住
+  // 導航：network-first（更新不易卡住）
   if (req.mode === "navigate") {
     event.respondWith(
       (async () => {
@@ -48,15 +48,14 @@ self.addEventListener("fetch", (event) => {
           cache.put("./index.html", fresh.clone());
           return fresh;
         } catch (err) {
-          const cached = await caches.match("./index.html");
-          return cached || caches.match("./");
+          return (await caches.match("./index.html")) || (await caches.match("./"));
         }
       })()
     );
     return;
   }
 
-  // 靜態資源：cache-first
+  // 靜態：cache-first
   event.respondWith(
     (async () => {
       const cached = await caches.match(req);
