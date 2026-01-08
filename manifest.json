@@ -1,7 +1,7 @@
 {
-  "name": "換匯記帳｜85/15 × 餘額 × RMB→TWD",
+  "name": "港幣85%換匯｜按月記帳簿",
   "short_name": "換匯記帳",
-  "description": "HKD→RMB 85/15 結帳、批次加總、按月記帳、餘額管理（存入/領出），並支援 RMB→TWD 換匯記錄（扣餘額）。",
+  "description": "港幣加總的85%全換成人民幣給對方；一鍵複製；換匯一鍵入帳；記帳簿按月檢索、可手動增刪、含備註；支援匯出/匯入備份JSON；含CNY→TWD匯率查詢連結。",
   "start_url": "./?source=pwa",
   "scope": "./",
   "display": "standalone",
